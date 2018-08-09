@@ -8,4 +8,12 @@
   <artifactId>mp-choir-service</artifactId>
   <name>mp-choir-service</name>
   <description>service dao entity</description>
+  
+  <dependencies>
+  	<dependency>
+		<groupId>com.shenghesun</groupId>
+		<artifactId>mp-choir-common</artifactId>
+		<version>${mp.choir.version}</version>
+	</dependency>
+  </dependencies>
 </project>
