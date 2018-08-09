@@ -7,5 +7,7 @@
   </parent>
   <artifactId>mp-choir-common</artifactId>
   <name>mp-choir-common</name>
+  <packaging>jar</packaging>
+  <url>http://maven.apache.org</url>
   <description>common</description>
 </project>
