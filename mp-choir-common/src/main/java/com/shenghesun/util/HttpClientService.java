@@ -124,6 +124,26 @@ public class HttpClientService {
         }
         return httpClient;
     }
+    
+    /**
+     * 返回新的CloseableHttpClient
+     * @Title: getNewHttpClient 
+     * @Description: TODO 
+     * @return  CloseableHttpClient 
+     * @author yangzp
+     * @date 2018年8月10日下午6:04:21
+     **/ 
+    public static CloseableHttpClient getNewHttpClient(){
+        synchronized (syncLock){
+                CookieStore cookieStore = new BasicCookieStore();
+                BasicClientCookie cookie = new BasicClientCookie("sessionID", "######");
+                cookie.setDomain("#####");
+                cookie.setPath("/");
+                cookieStore.addCookie(cookie);
+                httpClient =HttpClients.custom().setConnectionManager(clientConnectionManager).setDefaultCookieStore(cookieStore).setDefaultRequestConfig(config).build();
+            }
+        return httpClient;
+    }
     /**
      * get请求 无参数
      * @param url
@@ -292,14 +312,33 @@ public class HttpClientService {
     }
     
     /**
+     * 重新设置cookie
+     * @Title: getHttpClientDMH 
+     * @Description: TODO 
+     * @param cookieStore
+     * @return  CloseableHttpClient 
+     * @author yangzp
+     * @date 2018年8月10日下午4:18:05
+     **/ 
+    public static CloseableHttpClient getHttpClientDMH(CookieStore cookieStore){
+            synchronized (syncLock){
+            	httpClient =HttpClients.custom().setConnectionManager(clientConnectionManager).setDefaultCookieStore(cookieStore).setDefaultRequestConfig(config).build();
+            }
+        return httpClient;
+    }
+    
+    /**
     使用表单键值对传参
     */
-    public static String postForm(String url,Map<String,Object> headers,List<NameValuePair> data){
-        CloseableHttpClient httpClient = getHttpClient();
+    public static String postForm(String url,CookieStore cookieStore,List<NameValuePair> data){
+    	
+        CloseableHttpClient httpClient = null;
+        if(cookieStore != null) {
+        	httpClient = getHttpClientDMH(cookieStore);
+    	}else {
+    		httpClient = getHttpClient();
+    	}
         HttpRequest request = new HttpPost(url);
-        if(headers!=null&&!headers.isEmpty()){
-            request = setHeaders(headers,request);
-        }
         CloseableHttpResponse response = null;
         UrlEncodedFormEntity uefEntity;
         try {
@@ -326,6 +365,7 @@ public class HttpClientService {
      * @param request
      * @return
      */
+    
     private static HttpRequest setHeaders(Map<String,Object> headers, HttpRequest request) {
         for (Map.Entry<String,Object> entry : headers.entrySet()) {
             if (!entry.getKey().equals("Cookie")) {

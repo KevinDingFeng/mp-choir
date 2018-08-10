@@ -31,6 +31,12 @@ public class PropertyConfigurer {
 	@Value("${dmh.auth.url}")
 	private String authUrl;
 	
+	/**
+	 * cookie中的Domain
+	 */
+	@Value("${dmh.auth.domain}")
+	private String domain;
+	
 
 	public String getDmhServerUrl() {
 		return dmhServerUrl;
@@ -42,5 +48,9 @@ public class PropertyConfigurer {
 
 	public String getAuthUrl() {
 		return authUrl;
+	}
+
+	public String getDomain() {
+		return domain;
 	}
 }

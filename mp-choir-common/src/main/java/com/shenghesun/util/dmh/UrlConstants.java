@@ -17,4 +17,9 @@ public class UrlConstants {
      * 通过分类 ID 获取歌单列表
      */
     public static final String TRACKLIST_GETTRACKLISTBYCATGORY = "/TRACKLIST/getTrackListByCatgory.json";
+    
+    /**
+     * 查询当前已授权可使用的所有专辑列表。
+     */
+    public static final String ALBUM_ALBUMGETALL = "/ALBUM/albumGetAll.json";
 }

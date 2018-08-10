@@ -18,6 +18,10 @@ public class DMHConstants {
 	 * 公钥存入redis中的key
 	 */
 	public static final String DMH_PUBLICKEY = "dmhPublicKey";
+	/**
+	 * cookie存入redis中的key
+	 */
+	public static final String DMH_COOKIE = "dmhCookie";
 	
 	/**
 	 * 具体要调用的方法名的key

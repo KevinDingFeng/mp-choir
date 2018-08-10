@@ -68,7 +68,7 @@ public class UserController {
 	@ResponseBody
 	public String demoShowName(@PathVariable String name) {
 		logger.debug("访问getUserByName,Name={}", name);
-		String result = dmhService.getTrackListByCatgory("1001", 1, 20);
+		String result = dmhService.albumGetAll(1, 2);
 		System.out.println("token====="+result);
 		return "name is  " + result;
 	}

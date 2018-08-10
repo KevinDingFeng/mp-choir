@@ -82,6 +82,21 @@ public class RedisUtil {
 		}
 		return result.toString();
 	}
+	
+	public Object getObj(final String key) {
+		Object result = null;
+		redisTemplate.setValueSerializer(new StringRedisSerializer());
+		ValueOperations<Serializable, Object> operations = redisTemplate.opsForValue();
+		try {
+			result = operations.get(key);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (result == null) {
+			return null;
+		}
+		return result;
+	}
 
 	/**
 	 * 写入缓存
