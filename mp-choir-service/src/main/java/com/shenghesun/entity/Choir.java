@@ -17,7 +17,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-//微信群
+//合唱团信息
 @Entity
 @Table
 @Data
@@ -44,7 +44,7 @@ public class Choir extends BaseEntity implements Serializable{
 	 * 专辑封面路径
 	 */
 	@Column(nullable = false, length = 100)
-	private String albumArt;
+	private String albumArtPaht;
 	
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "choir_user_rel", 
