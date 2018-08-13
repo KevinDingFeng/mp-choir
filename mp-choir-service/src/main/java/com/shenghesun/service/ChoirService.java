@@ -12,8 +12,8 @@ public class ChoirService {
 	@Autowired
 	private ChoirDao choirDao;
 	
-	public Choir save(Choir group) {
-		return choirDao.save(group);
+	public Choir save(Choir choir) {
+		return choirDao.save(choir);
 	}
 	
 }

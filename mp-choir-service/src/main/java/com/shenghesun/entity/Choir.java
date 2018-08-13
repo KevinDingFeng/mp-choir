@@ -46,6 +46,12 @@ public class Choir extends BaseEntity implements Serializable{
 	@Column(nullable = false, length = 100)
 	private String albumArtPaht;
 	
+	/**
+	 * 状态 0：未合成；1：已合成
+	 */
+	@Column
+	private int status=0;
+	
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "choir_user_rel", 
 	inverseJoinColumns = {@JoinColumn(name = "user_id")}, 
