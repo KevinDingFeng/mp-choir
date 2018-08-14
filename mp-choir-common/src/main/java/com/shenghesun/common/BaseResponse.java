@@ -1,8 +1,6 @@
 package com.shenghesun.common;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 import lombok.Data;
 
@@ -20,6 +18,6 @@ public class BaseResponse implements Serializable {
 	protected int errorCode = 0;
 	protected String message = "操作成功";
 	protected String extraMessage;
-	protected Map<String, Object> data = new HashMap<String, Object>();
+	protected Object data;
 	
 }
