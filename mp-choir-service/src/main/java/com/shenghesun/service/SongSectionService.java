@@ -19,18 +19,20 @@ public class SongSectionService {
     private SongSectionDao songSectionDao;
 
 
-//    public List<SongSection> findMySection(){
-//        Long userId = 1L;
-//        return songSectionDao.findAll(new Specification<SongSection>() {
-//            @Override
-//            public Predicate toPredicate(Root<SongSection> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-//                Predicate predicate = cb.conjunction();
-//                predicate.getExpressions().add(cb.equal(root.get("userId"),userId));
-//                cb.and(cb.equal(root.get("status").as(SongSection.SectionStatusEnum.class), SongSection.SectionStatusEnum.RECORDED),
-//                        cb.equal())
-//                predicate.getExpressions().add(cb.equal(root.get("status").as(SongSection.SectionStatusEnum.class),
-//                        SongSection.SectionStatusEnum))
-//            }
-//        });
-//    }
+    public List<SongSection> findMySection() {
+        Long userId = 1L;
+        return songSectionDao.findAll(new Specification<SongSection>() {
+            @Override
+            public Predicate toPredicate(Root<SongSection> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                Predicate predicate = cb.conjunction();
+                predicate.getExpressions().add(cb.equal(root.get("userId"), userId));
+                Predicate and = cb.and(cb.equal(root.get("status").as(SongSection.SectionStatusEnum.class),
+                        SongSection.SectionStatusEnum.RECORDED),
+                        cb.equal(root.get("choir").get("status"), 0));
+                predicate.getExpressions().add(cb.or(and, cb.equal(root.get("status")
+                        .as(SongSection.SectionStatusEnum.class), SongSection.SectionStatusEnum.NO_RECORDING)));
+                return predicate;
+            }
+        });
+    }
 }
