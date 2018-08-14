@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("song_section")
+@RequestMapping("/song_section")
 public class SongSectionController {
 
     @Autowired
     private SongSectionService songSectionService;
 
-    @RequestMapping("my_song_section")
+    @RequestMapping("/my_song_section")
     public BaseResponse mySongSection() {
         BaseResponse response = new BaseResponse();
         try {

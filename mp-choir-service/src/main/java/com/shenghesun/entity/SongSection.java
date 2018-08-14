@@ -26,14 +26,14 @@ public class SongSection extends BaseEntity implements Serializable {
      */
     private static final long serialVersionUID = 7496767747592566932L;
 
-    /**
-     * 合唱团id
-     */
-    @Column
-    private Long choirId;
+//    /**
+//     * 合唱团id
+//     */
+//    @Column(insertable = false, updatable = false)
+//    private Long choirId;
 
     @ManyToOne(cascade = {CascadeType.REFRESH})
-    @JoinColumn(name = "choir_id", insertable = false, updatable = false)
+    @JoinColumn(name = "choir_id")
     private Choir choir;
 
     /**
