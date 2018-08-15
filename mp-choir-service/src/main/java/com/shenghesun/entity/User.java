@@ -20,9 +20,9 @@ import lombok.ToString;
 @Table
 @Data
 @ToString(exclude = {"choirs"})
-@EqualsAndHashCode(exclude = {"choirs"},callSuper = false)
+@EqualsAndHashCode(exclude = {"choirs"},callSuper = true)
 @JsonIgnoreProperties("choirs")
-public class User extends BaseEntity implements Serializable {
+public class User extends BaseEntity implements Serializable,Comparable<User> {
 
 	private static final long serialVersionUID = -7876850738135969925L;
 
@@ -54,6 +54,12 @@ public class User extends BaseEntity implements Serializable {
 	
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "users")
 	private Set<Choir> choirs;
-	
+
+
+	@Override
+	public int compareTo(User o) {
+        return this.id.compareTo(o.id);
+	}
+
 
 }

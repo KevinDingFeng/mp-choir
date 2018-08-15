@@ -22,7 +22,7 @@ import lombok.ToString;
 @Table
 @Data
 @ToString(exclude = {"users"})
-@EqualsAndHashCode(exclude = {"users"},callSuper = false)
+@EqualsAndHashCode(exclude = {"users"},callSuper = true)
 @JsonIgnoreProperties("users")
 public class Choir extends BaseEntity implements Serializable{
 

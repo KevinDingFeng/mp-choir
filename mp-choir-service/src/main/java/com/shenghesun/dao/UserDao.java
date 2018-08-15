@@ -9,4 +9,5 @@ import com.shenghesun.entity.User;
 public interface UserDao extends JpaRepository<User, Long> {
 
 	public User findByOpenId(String openId);
+	
 }

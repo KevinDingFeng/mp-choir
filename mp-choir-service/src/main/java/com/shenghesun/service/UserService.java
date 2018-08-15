@@ -1,5 +1,7 @@
 package com.shenghesun.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,5 +20,9 @@ public class UserService {
 	
 	public User findByOpenId(String openId) {
 		return userDao.findByOpenId(openId);
+	}
+	
+	public Optional<User> findById(Long id) {
+		return userDao.findById(id);
 	}
 }

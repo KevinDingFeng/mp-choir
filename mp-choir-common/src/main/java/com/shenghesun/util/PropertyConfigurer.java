@@ -37,6 +37,15 @@ public class PropertyConfigurer {
 	@Value("${dmh.auth.domain}")
 	private String domain;
 	
+	@Value("${upload.file.path}")
+	private String uploadFilePath;
+	
+	@Value("${show.file.path}")
+	private String showFilePath;
+
+	public String getUploadFilePath() {
+		return uploadFilePath;
+	}
 
 	public String getDmhServerUrl() {
 		return dmhServerUrl;
@@ -52,5 +61,9 @@ public class PropertyConfigurer {
 
 	public String getDomain() {
 		return domain;
+	}
+
+	public String getShowFilePath() {
+		return showFilePath;
 	}
 }

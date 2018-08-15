@@ -85,6 +85,87 @@ public class DMHService {
 	}
 	
 	/**
+	 * 通过专辑唯一码(albumAssetCode), 获取专辑下的单曲列表。
+	 * @Title: albumGetSong 
+	 * @Description: TODO 
+	 * @param productId 专辑 id 编号 albumAssetCode,比如 P10000533413	
+	 * @param pageNo
+	 * @param pageSize
+	 * @return  String 
+	 * @author yangzp
+	 * @date 2018年8月14日下午4:03:10
+	 **/ 
+	public String albumGetSong(String productId, int pageNo, int pageSize) {
+		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put(DMHConstants.ACTION, UrlConstants.ALBUM_ALBUMGETSONG);
+		dataMap.put("productId", productId);
+		dataMap.put(DMHConstants.PAGE_NO, pageNo);
+		dataMap.put(DMHConstants.PAGE_SIZE, pageSize);
+		
+		return postDMHService(dataMap);
+	}
+	
+	/**
+	 * 通过单曲的 TSID(又名 assetId)，查询单曲的详细信息。
+	 * @Title: trackInfo 
+	 * @Description: TODO 
+	 * @param TSID TSID 多首歌可以用,分割。如	T10011823220	
+	 * @return  String 
+	 * @author yangzp
+	 * @date 2018年8月15日上午10:02:43
+	 **/ 
+	public String trackInfo(String TSID) {
+		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put(DMHConstants.ACTION, UrlConstants.SONG_TRACKINFO);
+		dataMap.put("TSID", TSID);
+		
+		return postDMHService(dataMap);
+	}
+	
+	/**
+	 * 通过单曲的 TSID，获取单曲的播放链接。
+	 * @Title: trackLink 
+	 * @Description: TODO 
+	 * @param TSID 如	T10011823220
+	 * @param rate一般根据订阅的码流进行调用。通用的码流包括：
+	 *             64、128、320、3000(3000 表示 16bit 无损)
+	 * @return  String 
+	 * @author yangzp
+	 * @date 2018年8月15日上午10:01:22
+	 **/ 
+	public String trackLink(String TSID, int rate) {
+		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put(DMHConstants.ACTION, UrlConstants.SONG_TRACKLINK);
+		dataMap.put("TSID", TSID);
+		dataMap.put("rate", rate);
+		
+		return postDMHService(dataMap);
+	}
+	
+	/**
+	 * 通过此接口，选择歌曲进行切割。将音频切割为 1~60 秒的短音频。短音频可用
+     * 于直接播放和插入短视频中播放。
+	 * @Title: creatShort 
+	 * @Description: TODO 
+	 * @param TSID 输入单曲的 TSID，多个单曲用”,”分隔。
+	 * @param startOffset 音频起始秒数，规定切割的起始秒数。
+	 *              如 10.336(精准到毫秒；不能为负数，也不能超过音乐的时长)
+	 * @param duration 切割音频的长度，在 1~120 秒之间。如 30.256(精准到毫秒)
+	 * @return  String 
+	 * @author yangzp
+	 * @date 2018年8月14日下午4:13:02
+	 **/ 
+	public String creatShort(String TSID, int startOffset, int duration) {
+		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put(DMHConstants.ACTION, UrlConstants.TRACKSHORT_CREATSHORT);
+		dataMap.put("TSID", TSID);
+		dataMap.put("startOffset", startOffset);
+		dataMap.put("duration", duration);
+		
+		return postDMHService(dataMap);
+	}
+	
+	/**
 	 * 调用太合接口公共方法
 	 * @Title: postDMHService 
 	 * @Description: TODO 

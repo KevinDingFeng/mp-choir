@@ -54,7 +54,13 @@ public class UserController {
 	@ResponseBody
 	public String demoShowName(@PathVariable String name) {
 		logger.debug("访问getUserByName,Name={}", name);
-		String result = dmhService.albumGetAll(1, 2);
+		//查询当前已授权可使用的所有专辑列表。
+		//String result = dmhService.albumGetAll(1, 10);
+		//通过专辑唯一码(albumAssetCode), 获取专辑下的单曲列表。
+		//String result = dmhService.albumGetSong("P10000971760",1, 10);
+		//String result = dmhService.trackInfo("T10022844688");
+		String result = dmhService.trackLink("T10022844688", 320);//128,320
+		//String result = dmhService.creatShort("T10022844688",10, 20);
 		System.out.println("token====="+result);
 		return "name is  " + result;
 	}
@@ -143,6 +149,8 @@ public class UserController {
 		
 		return response;
 	}
+	
+	
 	
 	public String getSessionKey(String token) {
 		String tokenValue = redisUtil.get(token);
