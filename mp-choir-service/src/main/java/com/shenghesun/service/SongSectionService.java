@@ -2,18 +2,27 @@ package com.shenghesun.service;
 
 import com.shenghesun.dao.SongSectionDao;
 import com.shenghesun.entity.SongSection;
+import com.shenghesun.util.FileIOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SongSectionService {
+
+    @Value("${upload.file.path}")
+    private String audioFilePath;
 
     @Autowired
     private SongSectionDao songSectionDao;
@@ -35,16 +44,32 @@ public class SongSectionService {
             }
         });
     }
-    
+
     public SongSection save(SongSection songSection) {
-    	return songSectionDao.save(songSection);
+        return songSectionDao.save(songSection);
     }
-    
-    public List<SongSection> findByChoirId(Long id){
-    	return songSectionDao.findByChoirIdOrderBySortAsc(id);
+
+    public List<SongSection> findByChoirId(Long id) {
+        return songSectionDao.findByChoirIdOrderBySortAsc(id);
     }
-    
+
     public void delete(List<SongSection> songSections) {
-    	 songSectionDao.deleteAll(songSections);
+        songSectionDao.deleteAll(songSections);
+    }
+
+    public boolean uploadAudioFile(Long sectionId, MultipartFile audioFile) throws IOException {
+        String path = FileIOUtil.uploadFile(audioFile.getOriginalFilename(), audioFile.getInputStream(),
+                audioFilePath, false);
+        SongSection songSection = songSectionDao.findById(sectionId).orElse(null);
+        if (songSection == null) {
+            return false;
+        }
+        songSection.setAudioPath(path);
+        songSectionDao.save(songSection);
+        return true;
+    }
+
+    public String getAudioFilePath() {
+        return audioFilePath;
     }
 }

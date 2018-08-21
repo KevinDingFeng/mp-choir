@@ -87,4 +87,6 @@ public class SongSection extends BaseEntity implements Serializable {
 		}
     }
 
+    private String audioPath;
+
 }
