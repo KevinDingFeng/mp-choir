@@ -70,4 +70,9 @@ public class UrlConstants {
      * 设置当前要启用的服务。
      */
     public static final String OPENAPI_SETSPUSERBIZID = "/OPENAPI/setSpUserBizID.json";
+    
+    /**
+     * 通过资源id(resource id)和TSID获取短音频信息。
+     */
+    public static final String TRACKSHORT_SELECTSHORTRATE = "/TRACKSHORT/selectShortRate.json";
 }

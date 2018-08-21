@@ -155,7 +155,7 @@ public class DMHService {
 	 * @author yangzp
 	 * @date 2018年8月14日下午4:13:02
 	 **/ 
-	public String creatShort(String TSID, int startOffset, int duration) {
+	public String creatShort(String TSID, float startOffset, float duration) {
 		Map<String, Object> dataMap = new HashMap<>();
 		dataMap.put(DMHConstants.ACTION, UrlConstants.TRACKSHORT_CREATSHORT);
 		dataMap.put("TSID", TSID);
@@ -264,10 +264,39 @@ public class DMHService {
 		return postDMHService(dataMap);
 	}
 	
+	/**
+	 * 设置当前要启用的服务。
+	 * @Title: setSpUserBizID 
+	 * @Description: TODO 
+	 * @param bizId
+	 * @return  String 
+	 * @author yangzp
+	 * @date 2018年8月21日下午5:36:47
+	 **/ 
 	public String setSpUserBizID(int bizId) {
 		Map<String, Object> dataMap = new HashMap<>();
 		dataMap.put(DMHConstants.ACTION, UrlConstants.OPENAPI_SETSPUSERBIZID);
 		dataMap.put("bizId", bizId);
+		return postDMHService(dataMap);
+	}
+	
+	/**
+	 * 通过资源id(resource id)和TSID获取短音频信息。
+	 * @Title: selectShortRate 
+	 * @Description: TODO 
+	 * @param TSID 输入单曲的TSID，多个单曲用”,”分隔。
+	 * @param resourceId 切割的短音频资源id
+	 * @param rate 短音频需要的码流输入（64、128、320、3000(无损)）
+	 * @return  String 
+	 * @author yangzp
+	 * @date 2018年8月21日下午5:38:07
+	 **/ 
+	public String selectShortRate(String TSID, String resourceId, int rate) {
+		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put(DMHConstants.ACTION, UrlConstants.OPENAPI_SETSPUSERBIZID);
+		dataMap.put("TSID", TSID);
+		dataMap.put("resourceId", resourceId);
+		dataMap.put("rate", rate);
 		return postDMHService(dataMap);
 	}
 	

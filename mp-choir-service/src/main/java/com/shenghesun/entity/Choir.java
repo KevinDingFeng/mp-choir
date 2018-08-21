@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -47,6 +48,18 @@ public class Choir extends BaseEntity implements Serializable{
 	private String albumArtPaht;
 	
 	/**
+	 * 歌名
+	 */
+	@Column(length = 100)
+	private String songName;
+	
+	/**
+	 * 歌手
+	 */
+	@Column(length = 100)
+	private String singer;
+	
+	/**
 	 * 状态 0：未合成；1：已合成
 	 */
 	@Column
@@ -58,5 +71,6 @@ public class Choir extends BaseEntity implements Serializable{
 	joinColumns = {@JoinColumn(name = "choir_id")})
 	private Set<User> users;
 	
-	
+	@Transient
+	private String TSID;
 }

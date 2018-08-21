@@ -115,7 +115,6 @@ public class ChoirController {
 			    response.setData(choir);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
 			logger.error("Exception {} in {} " , e.getMessage() , "creat"); 
 		}
 		return response;

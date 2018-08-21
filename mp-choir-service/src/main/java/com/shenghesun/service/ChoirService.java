@@ -28,4 +28,23 @@ public class ChoirService {
 		return null;
 	}
 	
+	/**
+	 * 修改时设置version
+	 * @Title: get4Update 
+	 * @Description: TODO 
+	 * @param choir
+	 * @return  Choir 
+	 * @author yangzp
+	 * @date 2018年8月21日下午2:14:38
+	 **/ 
+	public Choir get4Update(Choir choir) {
+		Optional<Choir> opt = choirDao.findById(choir.getId());
+		if(opt!=null) {
+			Choir dbChoir = opt.get();
+			choir.setVersion(dbChoir.getVersion());
+			return choir;
+		}
+		return null;
+	}
+	
 }

@@ -35,4 +35,16 @@ public class SongSectionService {
             }
         });
     }
+    
+    public SongSection save(SongSection songSection) {
+    	return songSectionDao.save(songSection);
+    }
+    
+    public List<SongSection> findByChoirId(Long id){
+    	return songSectionDao.findByChoirIdOrderBySortAsc(id);
+    }
+    
+    public void delete(List<SongSection> songSections) {
+    	 songSectionDao.deleteAll(songSections);
+    }
 }
