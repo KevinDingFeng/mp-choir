@@ -166,6 +166,112 @@ public class DMHService {
 	}
 	
 	/**
+	 * 通过输入关键字，进行模糊查询。可以查询单曲、专辑、艺人、歌单、电台、榜单。
+	 * @Title: searchMerge 
+	 * @Description: TODO 
+	 * @param word 输入关键字
+	 * @param type 1:单曲；2:艺人；3:专辑；41:歌单；42:电台；43:榜单
+	 * @param pageNo 第几页, 必传. 必须为大于1的整数
+	 * @param pageSize 一页返回多少结果集, 必传, 默认为10
+	 * @return  String 
+	 * @author yangzp
+	 * @date 2018年8月20日上午10:19:04
+	 **/ 
+	public String searchMerge(String word, int type, int pageNo, int pageSize) {
+		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put(DMHConstants.ACTION, UrlConstants.SEARCH_MERGE);
+		dataMap.put("word", word);
+		dataMap.put("type", type);
+		dataMap.put(DMHConstants.PAGE_NO, pageNo);
+		dataMap.put(DMHConstants.PAGE_SIZE, pageSize);
+		
+		return postDMHService(dataMap);
+	}
+	
+	/**
+	 * 多条件组合搜索歌曲/专辑
+	 * @Title: searchInSearch 
+	 * @Description: TODO 
+	 * @param genre 输入风格名称，如：流行
+	 * 多个风格用逗号分隔，最多10个，超过忽略，词之间的关系为or
+	 * 只支持精准查询，通过11.3章的歌曲风格接口和11.4章的专辑风格统计。可找到客户曲库包含的风格
+	 * @param language 输入语言名称，如：中文
+	 * 多个语言用逗号分隔，最多10个，超过忽略，词之间的关系为or
+	 * 只支持精准查询，通过11.5章的歌曲语言接口可找到客户曲库包含的语言统计
+	 * @param relaseDataStart输入发行开始和结束时间，如：1990-1-1到1999-12-31
+	 * 只支持精准查询
+	 * 通过年代表找到年代与发行时间的对应关系，您也可以设计这个关系
+	 * @param relaseDataEnd
+	 * @param artistName 输入歌曲表演者的名称，如：薛之谦
+	 * 多个词用逗号分隔，最多100个，超过忽略，词之间的关系为or支持精准和模糊查询
+	 * @param artistGender 艺人性别。多个用,分隔。值包括：男、女、组合、乐队、未知
+	 * @param artistBirthdayStart 艺人生日的开始时间-结束时间。用于描述某个年龄段的艺人。值格式：年-月-日；如2018-1-1
+	 * @param artistBirthdayEnd
+	 * @param trackTitle  输入歌曲的名称，如：演员
+	 * 多个词用逗号分隔，最多100个，超过忽略，词之间的关系为or支持精准和模糊查询
+	 * @param albumTitle 输入歌曲所属专辑的名称，如：绅士
+	 * 多个词用逗号分隔，最多100个，超过忽略，词之间的关系为or
+	 * 支持精准和模糊查询
+	 * @param matchMode 查询方式：1 精准；2 模糊。默认值为1
+	 * @param sortMode 只在matchMode=1时工作。1、热度；2、最老；3、最新。默认值为1
+	 * @param searchType 1、搜索歌曲；2、搜索专辑
+	 * @param pageNo
+	 * @param pageSize
+	 * @return  String 
+	 * @author yangzp
+	 * @date 2018年8月20日上午11:23:22
+	 **/ 
+	public String searchInSearch(
+//								String genre, 
+//								String language,
+//								String relaseDataStart,
+//								String relaseDataEnd,
+//								String artistName,
+//								String artistGender,
+//								String artistBirthdayStart,
+//								String artistBirthdayEnd,
+								String trackTitle,
+//								String albumTitle,
+//								int matchMode,
+//								int sortMode,
+//								int searchType,
+								int pageNo, int pageSize) {
+		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put(DMHConstants.ACTION, UrlConstants.SEARCH_INSEARCH);
+		//dataMap.put("language", "英语");
+		//dataMap.put("artistName", artistName);
+		dataMap.put("trackTitle", trackTitle);
+		dataMap.put("searchType", 1);
+		
+		dataMap.put(DMHConstants.PAGE_NO, pageNo);
+		dataMap.put(DMHConstants.PAGE_SIZE, pageSize);
+		
+		return postDMHService(dataMap);
+	}
+	
+	
+	/**
+	 * 查询当前用户定制的服务类型。
+	 * @Title: getSpSessionBizList 
+	 * @Description: TODO 
+	 * @return  String 
+	 * @author yangzp
+	 * @date 2018年8月21日上午10:19:33
+	 **/ 
+	public String getSpSessionBizList() {
+		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put(DMHConstants.ACTION, UrlConstants.OPENAPI_GETSPSESSIONBIZLIST);
+		return postDMHService(dataMap);
+	}
+	
+	public String setSpUserBizID(int bizId) {
+		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put(DMHConstants.ACTION, UrlConstants.OPENAPI_SETSPUSERBIZID);
+		dataMap.put("bizId", bizId);
+		return postDMHService(dataMap);
+	}
+	
+	/**
 	 * 调用太合接口公共方法
 	 * @Title: postDMHService 
 	 * @Description: TODO 

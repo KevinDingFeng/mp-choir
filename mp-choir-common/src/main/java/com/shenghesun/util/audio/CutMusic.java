@@ -45,7 +45,7 @@ public class CutMusic {
 			bos = new BufferedOutputStream(new FileOutputStream(f, true));
 
 			// 第一首歌剪切、写入
-			byte[] b1 = new byte[512];
+			byte[] b1 = new byte[BUFFER_SIZE];
 			int len1 = 0;
 			while ((len1 = bis1.read(b1)) != -1) {
 				tatol1 += len1; // 累积tatol
@@ -63,7 +63,7 @@ public class CutMusic {
 			System.out.println("第一首歌剪切完成！");
 
 			// 第二首歌剪切、写入，原理同上
-			byte[] b2 = new byte[512];
+			byte[] b2 = new byte[BUFFER_SIZE];
 			int len2 = 0;
 			while ((len2 = bis2.read(b2)) != -1) {
 				tatol2 += len2;
@@ -215,7 +215,7 @@ public class CutMusic {
 //	}
 	
 	/**
-	 * 生成目标mp3文件
+	 * 分段生成目标mp3文件
 	 * @Title: generateTargetMp3File 
 	 * @Description: TODO 
 	 * @param targetFile 
@@ -252,6 +252,41 @@ public class CutMusic {
 			int size = (int) (endByte - beginByte);
 			
 			writeSourceToTargetFileWithBuffer(tarRaf, sourRaf, size, beginByte);
+			
+			try {
+				if (sourRaf != null)
+					sourRaf.close();
+				if (tarRaf != null)
+					tarRaf.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+	}
+	
+	/**
+	 * 合成生成目标MP3文件
+	 * @Title: compoundTargetMp3File 
+	 * @Description: TODO 
+	 * @param targetFile
+	 * @param sourceFile  
+	 * void 
+	 * @author yangzp
+	 * @date 2018年8月16日下午6:49:58
+	 **/ 
+	public static void compoundTargetMp3File(File targetFile, File sourceFile) {
+		// RandomAccessFile sourceFile = new RandomAccessFile("mSourceMp3File", "rw");
+		
+		try {
+			RandomAccessFile tarRaf = new RandomAccessFile(targetFile,"rw");
+			RandomAccessFile sourRaf = new RandomAccessFile(sourceFile,"rw");
+			
+			
+			// write mp3 frame info
+			
+			writeSourceToTargetFileWithBuffer(tarRaf, sourRaf, sourceFile.length(), 0);
 			
 			try {
 				if (sourRaf != null)

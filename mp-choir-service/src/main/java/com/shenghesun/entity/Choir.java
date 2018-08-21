@@ -36,14 +36,14 @@ public class Choir extends BaseEntity implements Serializable{
 	/**
 	 * 合唱人数
 	 */
-	@Column
+	@Column(nullable = false)
 	private int population;
 	
 	
 	/**
 	 * 专辑封面路径
 	 */
-	@Column(nullable = false, length = 100)
+	@Column(length = 100)
 	private String albumArtPaht;
 	
 	/**
