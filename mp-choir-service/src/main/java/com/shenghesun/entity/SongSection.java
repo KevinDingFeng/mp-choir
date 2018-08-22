@@ -7,10 +7,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,6 +30,7 @@ import lombok.EqualsAndHashCode;
 @Table
 @Data
 @EqualsAndHashCode(callSuper = false)
+@JsonIgnoreProperties("choir")
 public class SongSection extends BaseEntity implements Serializable {
     /**
      *
@@ -39,7 +43,7 @@ public class SongSection extends BaseEntity implements Serializable {
 //    @Column(insertable = false, updatable = false)
 //    private Long choirId;
 
-    @ManyToOne(cascade = {CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.MERGE)
     @JoinColumn(name = "choir_id")
     private Choir choir;
 

@@ -1,6 +1,7 @@
 package com.shenghesun.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -40,6 +41,12 @@ public class Choir extends BaseEntity implements Serializable{
 	@Column(nullable = false)
 	private int population;
 	
+	/**
+	 * 完成数
+	 */
+	@Column
+	private int completeNum = 0;
+	
 	
 	/**
 	 * 专辑封面路径
@@ -73,4 +80,7 @@ public class Choir extends BaseEntity implements Serializable{
 	
 	@Transient
 	private String TSID;
+	
+	@Transient
+	private List<SongSection> songSection;//分段列表
 }
