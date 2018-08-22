@@ -1,26 +1,34 @@
 package com.shenghesun.choir.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.shenghesun.common.BaseResponse;
-import com.shenghesun.dmh.service.DMHService;
-import com.shenghesun.entity.SongSection;
-import com.shenghesun.service.SongSectionService;
+import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.alibaba.fastjson.JSONObject;
+import com.shenghesun.common.BaseResponse;
+import com.shenghesun.dmh.service.DMHService;
+import com.shenghesun.entity.Choir;
+import com.shenghesun.entity.SongSection;
+import com.shenghesun.service.SongSectionService;
+import com.shenghesun.util.DateUtil;
+import com.shenghesun.util.PropertyConfigurer;
 
 @RestController
 @RequestMapping("/song_section")
 public class SongSectionController {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	@Autowired
+	private PropertyConfigurer propertyConfigurer;
 
     @Autowired
     private SongSectionService songSectionService;
@@ -46,7 +54,7 @@ public class SongSectionController {
     }
     
     /**
-     * 根据成团id获取分段歌曲，用于点唱
+     * 根据成团id获取分段歌曲，发起者用于点唱
      * @Title: getSectionSong 
      * @Description: TODO 
      * @param choirId
@@ -59,13 +67,23 @@ public class SongSectionController {
     	BaseResponse response = new BaseResponse();
     	try {
 			List<SongSection> ssList = songSectionService.findByChoirId(choirId);
+			Choir resultChoir = new Choir();
 			if(!CollectionUtils.isEmpty(ssList)) {
+				BeanUtils.copyProperties(ssList.get(0).getChoir(),resultChoir);
 				for(SongSection ss:ssList) {
 					//给短音频赋值播放链接
 					setSplitShortRate(ss);
 				}
+				resultChoir.setSongSection(ssList);
 			}
-			response.setData(ssList);
+			String albumArtPath = resultChoir.getAlbumArtPaht();
+			if(StringUtils.isNotEmpty(albumArtPath)) {
+				resultChoir.setAlbumArtPaht(propertyConfigurer.getShowFilePath()+
+						resultChoir.getAlbumArtPaht());
+    		}
+			//用于判断是否是发起者进入的分段页面
+			response.setExtraMessage("1");
+			response.setData(resultChoir);
 		} catch (Exception e) {
 			logger.error("Exception {} in {} " , e.getMessage() , "getSectionSong");
 			response.setSuccess(false);
@@ -92,6 +110,7 @@ public class SongSectionController {
         	songSection.setPath(path);
         	String duration = dataObj.getString("duration");
         	songSection.setDuration(duration);
+        	songSection.setDuration(DateUtil.formatSecond(songSection.getDuration()));
     	}
     }
 
