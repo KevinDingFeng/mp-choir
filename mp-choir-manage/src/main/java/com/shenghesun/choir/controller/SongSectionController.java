@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -92,5 +93,22 @@ public class SongSectionController {
         	String duration = dataObj.getString("duration");
         	songSection.setDuration(duration);
     	}
+    }
+
+    @RequestMapping("/{sectionId}/info")
+    public BaseResponse info(@PathVariable Long sectionId){
+        BaseResponse response = new BaseResponse();
+        try{
+            SongSection songSection = songSectionService.findById(sectionId);
+            response.setSuccess(true);
+            response.setMessage("操作成功");
+            response.setData(songSection);
+        }catch (Exception e){
+            response.setSuccess(false);
+            response.setMessage(e.getMessage());
+        }finally {
+            return response;
+        }
+
     }
 }

@@ -27,6 +27,13 @@ public class SongSectionService {
     @Autowired
     private SongSectionDao songSectionDao;
 
+    public SongSection findById(Long sectionId){
+        if(sectionId == null || sectionId <1){
+            return null;
+        }
+        return songSectionDao.findById(sectionId).orElse(null);
+    }
+
 
     public List<SongSection> findMySection() {
         Long userId = 1L;
