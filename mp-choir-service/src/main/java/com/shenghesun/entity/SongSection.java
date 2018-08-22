@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -70,7 +72,21 @@ public class SongSection extends BaseEntity implements Serializable {
      */
     @Transient
     private String path;
-
+    
+    /**
+     * 时长
+     */
+    @Transient
+    private String duration;
+    
+    /**
+     * 录音文件地址
+     */
+    @Column(length = 100)
+    private String audioPath;
+    
+    @Column(nullable = false, length = 50)
+	@Enumerated(EnumType.STRING)
     private SectionStatusEnum status = SectionStatusEnum.NO_CLAIM;
 
     public enum SectionStatusEnum {
@@ -86,7 +102,5 @@ public class SongSection extends BaseEntity implements Serializable {
 			return text;
 		}
     }
-
-    private String audioPath;
 
 }

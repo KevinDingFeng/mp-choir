@@ -1,22 +1,22 @@
 package com.shenghesun.service;
 
-import com.shenghesun.dao.SongSectionDao;
-import com.shenghesun.entity.SongSection;
-import com.shenghesun.util.FileIOUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import java.io.IOException;
+import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.shenghesun.dao.SongSectionDao;
+import com.shenghesun.entity.SongSection;
+import com.shenghesun.util.FileIOUtil;
 
 @Service
 public class SongSectionService {

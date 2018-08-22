@@ -293,7 +293,7 @@ public class DMHService {
 	 **/ 
 	public String selectShortRate(String TSID, String resourceId, int rate) {
 		Map<String, Object> dataMap = new HashMap<>();
-		dataMap.put(DMHConstants.ACTION, UrlConstants.OPENAPI_SETSPUSERBIZID);
+		dataMap.put(DMHConstants.ACTION, UrlConstants.TRACKSHORT_SELECTSHORTRATE);
 		dataMap.put("TSID", TSID);
 		dataMap.put("resourceId", resourceId);
 		dataMap.put("rate", rate);
