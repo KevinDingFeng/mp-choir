@@ -29,6 +29,20 @@ public class SyntheticSongsService {
     @Value("${upload.file.path}")
     private String audioFilePath;
 
+    public SyntheticSongs findById(Long id) {
+        if (id == null || id < 1) {
+            return null;
+        }
+        return syntheticSongsDao.findById(id).orElse(null);
+    }
+
+    public SyntheticSongs findByChoirId(Long choirId) {
+        if (choirId == null || choirId < 1) {
+            return null;
+        }
+        return syntheticSongsDao.findByChoirId(choirId);
+    }
+
     public List<SyntheticSongs> findMySyntheticSongs(String openId) {
         if (StringUtils.isBlank(openId)) {
             return null;
