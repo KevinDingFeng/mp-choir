@@ -43,6 +43,7 @@ public class SyntheticSongs extends BaseEntity implements Serializable{
 	 */
 	@Column(nullable = false, length = 100)
 	private String songPath;
-	
 
+	@Column
+	private String wxacodePath;
 }

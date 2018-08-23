@@ -4,7 +4,9 @@ import com.shenghesun.common.BaseResponse;
 import com.shenghesun.entity.SyntheticSongs;
 import com.shenghesun.service.SyntheticSongsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,10 +19,10 @@ public class SyntheticSongsController {
     private SyntheticSongsService syntheticSongsService;
 
     @RequestMapping("/my_songs")
-    public BaseResponse mySongs() {
+    public BaseResponse mySongs(@RequestParam String openId) {
         BaseResponse response = new BaseResponse();
         try {
-            List<SyntheticSongs> mySyntheticSongs = syntheticSongsService.findMySyntheticSongs();
+            List<SyntheticSongs> mySyntheticSongs = syntheticSongsService.findMySyntheticSongs(openId);
             response.setData(mySyntheticSongs);
         } catch (Exception e) {
             response.setExtraMessage(e.getMessage());
@@ -29,6 +31,38 @@ public class SyntheticSongsController {
         } finally {
             return response;
         }
+    }
+
+    @RequestMapping("{id}/wxacode")
+    public BaseResponse getWxacode(@PathVariable Long id) {
+        BaseResponse response = new BaseResponse();
+        try {
+            String wxacodePath = syntheticSongsService.getWxacodePath(id);
+            response.setSuccess(true);
+            response.setData(wxacodePath);
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setSuccess(false);
+            response.setMessage(e.getMessage());
+        }
+        return response;
+    }
+
+    @RequestMapping("{choirId}/wxacode_choir_id")
+    public BaseResponse getWxacodeByChoirId(@PathVariable Long choirId) {
+        BaseResponse response = new BaseResponse();
+        try {
+            String wxacodePath = syntheticSongsService.getWxacodePathByChoirId(choirId);
+            response.setSuccess(true);
+            response.setData(wxacodePath);
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setSuccess(false);
+            response.setMessage(e.getMessage());
+        }
+        return response;
     }
 
 }

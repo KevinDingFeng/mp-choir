@@ -8,6 +8,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.shenghesun.entity.User;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
@@ -20,6 +22,9 @@ import com.shenghesun.util.FileIOUtil;
 
 @Service
 public class SongSectionService {
+
+    @Autowired
+    private UserService userService;
 
     @Value("${upload.file.path}")
     private String audioFilePath;
@@ -35,8 +40,15 @@ public class SongSectionService {
     }
 
 
-    public List<SongSection> findMySection() {
-        Long userId = 1L;
+    public List<SongSection> findMySection(String openId) {
+        if(StringUtils.isBlank(openId)){
+            return null;
+        }
+        User user = userService.findByOpenId(openId);
+        if(user == null){
+            return null;
+        }
+        Long userId = user.getId();
         return songSectionDao.findAll(new Specification<SongSection>() {
             @Override
             public Predicate toPredicate(Root<SongSection> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -79,4 +91,5 @@ public class SongSectionService {
     public String getAudioFilePath() {
         return audioFilePath;
     }
+
 }

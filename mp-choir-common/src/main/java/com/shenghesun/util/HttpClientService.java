@@ -12,10 +12,7 @@ import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpRequest;
-import org.apache.http.NameValuePair;
+import org.apache.http.*;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
@@ -229,29 +226,54 @@ public class HttpClientService {
      * @return
      */
     public static String httpPost(String url,Map<String,Object> headers,String data){
-        CloseableHttpClient httpClient = getHttpClient();
-        HttpRequest request = new HttpPost(url);
-        if(headers!=null&&!headers.isEmpty()){
-            request = setHeaders(headers,request);
-        }
-        CloseableHttpResponse response = null;
+         CloseableHttpClient httpClient = getHttpClient();
+         HttpRequest request = new HttpPost(url);
+         if(headers!=null&&!headers.isEmpty()){
+             request = setHeaders(headers,request);
+         }
+         CloseableHttpResponse response = null;
 
-        try {
-            HttpPost httpPost = (HttpPost) request;
-            httpPost.setEntity(new StringEntity(data, ContentType.create("application/json", "UTF-8")));
-            response=httpClient.execute(httpPost);
-            int status = response.getStatusLine().getStatusCode();
-            if ((status >= 200) && (status < 300)) {
-				HttpEntity entity = response.getEntity();
-				//System.out.println("=========="+EntityUtils.toString(response.getEntity()));
-				return entity != null ? EntityUtils.toString(entity) : null;
-			}
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return null;
-    }
+         try {
+             HttpPost httpPost = (HttpPost) request;
+             httpPost.setEntity(new StringEntity(data, ContentType.create("application/json", "UTF-8")));
+             response=httpClient.execute(httpPost);
+             int status = response.getStatusLine().getStatusCode();
+             if ((status >= 200) && (status < 300)) {
+                 HttpEntity entity = response.getEntity();
+                 //System.out.println("=========="+EntityUtils.toString(response.getEntity()));
+                 return entity != null ? EntityUtils.toString(entity) : null;
+             }
+         } catch (IOException e) {
+             e.printStackTrace();
+             return null;
+         }
+         return null;
+     }
+
+     public static HttpResponse post(String url, Map<String,Object> headers, String data){
+         CloseableHttpClient httpClient = getHttpClient();
+         HttpRequest request = new HttpPost(url);
+         if(headers!=null&&!headers.isEmpty()){
+             request = setHeaders(headers,request);
+         }
+         CloseableHttpResponse response = null;
+
+         try {
+             HttpPost httpPost = (HttpPost) request;
+             httpPost.setEntity(new StringEntity(data, ContentType.create("application/json", "UTF-8")));
+             response=httpClient.execute(httpPost);
+             int status = response.getStatusLine().getStatusCode();
+             if ((status >= 200) && (status < 300)) {
+                 HttpEntity entity = response.getEntity();
+                 //System.out.println("=========="+EntityUtils.toString(response.getEntity()));
+                 return response;
+             }
+         } catch (IOException e) {
+             e.printStackTrace();
+             return null;
+         }
+         return null;
+     }
     
     public static void main(String[] args) {
 		String url = "https://dev-openapi.dmhmusic.com/OPENAPI/openApiLogin.json";

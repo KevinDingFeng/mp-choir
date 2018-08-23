@@ -12,4 +12,6 @@ public interface SyntheticSongsDao extends JpaRepository<SyntheticSongs, Long>, 
 
     List<SyntheticSongs> findByUserIdsLike(String userId);
 
+    SyntheticSongs findByChoirId(Long choirId);
+
 }
