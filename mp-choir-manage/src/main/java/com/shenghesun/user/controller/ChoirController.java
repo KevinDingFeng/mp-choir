@@ -89,7 +89,7 @@ public class ChoirController {
 			    	choir.setAlbumArtPaht(coverPath);
 			    }
 			    Set<User> userSet = new TreeSet<>();
-			    Optional<User> userOpt = userService.findById(2L);
+			    Optional<User> userOpt = userService.findById(choir.getUserId());
 			    User user = new User();
 			    if(userOpt!=null) {
 			    	user = userOpt.get();

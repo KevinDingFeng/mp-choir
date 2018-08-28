@@ -83,4 +83,7 @@ public class Choir extends BaseEntity implements Serializable{
 	
 	@Transient
 	private List<SongSection> songSection;//分段列表
+	
+	@Transient
+	private Long userId;
 }
