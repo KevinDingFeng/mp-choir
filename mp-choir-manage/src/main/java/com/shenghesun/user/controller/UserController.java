@@ -59,8 +59,13 @@ public class UserController {
 		//通过专辑唯一码(albumAssetCode), 获取专辑下的单曲列表。
 		//String result = dmhService.albumGetSong("P10000971760",1, 10);
 		//String result = dmhService.trackInfo("T10022844688");
-		String result = dmhService.trackLink("T10022844688", 320);//128,320
-		//String result = dmhService.creatShort("T10022844688",10, 20);
+		//String result = dmhService.trackLink("T10033153645", 320);//128,320
+		//String result = dmhService.creatShort("T10022844688",1, 2);
+		//String result = dmhService.searchMerge("Ring Ring Ring",1, 1,20);
+		//String result = dmhService.searchInSearch("情深深雨蒙蒙", 1,20);
+		//String result = dmhService.getSpSessionBizList();
+		//String result = dmhService.setSpUserBizID(29);
+		String result = dmhService.selectShortRate("T10033153645", "150",128);
 		System.out.println("token====="+result);
 		return "name is  " + result;
 	}
@@ -90,13 +95,14 @@ public class UserController {
         // 解密用户信息
         WxMaUserInfo userInfo = this.wxService.getUserService().getUserInfo(sessionKey, encryptedData, iv);
         //往mysql 中插入user 信息 插入前判断是否已经存在， 存在则进行更新
-        if(userService.findByOpenId(userInfo.getOpenId()) == null) {
-        	User user = new User();
+        User user = userService.findByOpenId(userInfo.getOpenId());
+        if(user == null) {
             BeanUtils.copyProperties(userInfo, user);
             userService.save(user);
         }
         Map<String, Object> data = new HashMap<>();
         data.put("accessToken", accessToken);
+        data.put("userId", user.getId());
         response.setData(data);
 		return response;
 	}
