@@ -23,4 +23,6 @@ public class SignatureConstants {
     
     /** GBK字符集 **/
     public static final String CHARSET_GBK                    = "GBK";
+    /** 合唱的歌曲 **/
+    public static final String SHOW_SONGS = "好汉歌,好想好想,葫芦娃,简单爱,流星雨,情深深雨蒙蒙";
 }
