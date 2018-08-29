@@ -3,6 +3,7 @@ package com.shenghesun.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.shenghesun.dao.SyntheticSongsDao;
+import com.shenghesun.entity.SongSection;
 import com.shenghesun.entity.SyntheticSongs;
 import com.shenghesun.entity.User;
 import com.shenghesun.util.FileIOUtil;
@@ -107,4 +108,7 @@ public class SyntheticSongsService {
         return null;
     }
 
+    public SyntheticSongs save(SyntheticSongs syntheticSongs) {
+        return syntheticSongsDao.save(syntheticSongs);
+    }
 }
