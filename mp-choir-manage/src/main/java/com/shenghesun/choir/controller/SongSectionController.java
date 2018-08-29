@@ -38,10 +38,29 @@ public class SongSectionController {
     private DMHService dmhService;
 
     @RequestMapping("/my_song_section")
-    public BaseResponse mySongSection(@RequestParam String openId) {
+    public BaseResponse mySongSection(@RequestParam Long userId) {
+        userId = 1L;
         BaseResponse response = new BaseResponse();
         try {
-            List<SongSection> mySections = songSectionService.findMySection(openId);
+            List<SongSection> mySections = songSectionService.findMySection(userId);
+            response.setData(mySections);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setSuccess(false);
+            response.setErrorCode(400);
+            response.setMessage("操作失败");
+            response.setExtraMessage(e.getMessage());
+        } finally {
+            return response;
+        }
+    }
+
+    @RequestMapping("/my_writting")
+    public BaseResponse getMyWritting(@RequestParam Long userId) {
+        userId = 1L;
+        BaseResponse response = new BaseResponse();
+        try {
+            List<Choir> mySections = songSectionService.findMyWritting(userId);
             response.setData(mySections);
         } catch (Exception e) {
             e.printStackTrace();

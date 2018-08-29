@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 @Table
 @Data
 @EqualsAndHashCode(callSuper = false)
-@JsonIgnoreProperties("choir")
+//@JsonIgnoreProperties("choir")
 public class SongSection extends BaseEntity implements Serializable {
     /**
      *
@@ -43,7 +43,7 @@ public class SongSection extends BaseEntity implements Serializable {
 //    @Column(insertable = false, updatable = false)
 //    private Long choirId;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.MERGE)
     @JoinColumn(name = "choir_id")
     private Choir choir;
 

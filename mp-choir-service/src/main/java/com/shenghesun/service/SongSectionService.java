@@ -2,12 +2,14 @@ package com.shenghesun.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.shenghesun.entity.Choir;
 import com.shenghesun.entity.User;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,15 +42,10 @@ public class SongSectionService {
     }
 
 
-    public List<SongSection> findMySection(String openId) {
-        if(StringUtils.isBlank(openId)){
+    public List<SongSection> findMySection(Long userId) {
+        if(userId == null || userId<1){
             return null;
         }
-        User user = userService.findByOpenId(openId);
-        if(user == null){
-            return null;
-        }
-        Long userId = user.getId();
         return songSectionDao.findAll(new Specification<SongSection>() {
             @Override
             public Predicate toPredicate(Root<SongSection> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -62,6 +59,22 @@ public class SongSectionService {
                 return predicate;
             }
         });
+    }
+
+    public List<Choir> findMyWritting(Long userId){
+        if(userId == null || userId<1){
+            return null;
+        }
+        List<SongSection> list = songSectionDao.findAll(new Specification<SongSection>() {
+            @Override
+            public Predicate toPredicate(Root<SongSection> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                Predicate predicate = cb.conjunction();
+                predicate.getExpressions().add(cb.equal(root.get("userId"), userId));
+                predicate.getExpressions().add(cb.equal(root.get("choir").get("status"), 1));
+                return predicate;
+            }
+        });
+        return list.stream().map(SongSection::getChoir).collect(Collectors.toList());
     }
 
     public SongSection save(SongSection songSection) {
