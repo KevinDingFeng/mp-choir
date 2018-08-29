@@ -78,6 +78,8 @@ public class SplitSongController {
 				for(int i=0; i<timeArry.length; i++) {
 					//每一段的起始和切割长度
 					String [] splitTemeArry = timeArry[i].split(",");
+					//设置当前要启用的服务 29:短音频\/短视频
+					dmhService.setSpUserBizID(29);
 					//创建短音频
 					String result = dmhService.creatShort(choir.getTSID(),Float.parseFloat(splitTemeArry[0]), Float.parseFloat(splitTemeArry[1]));
 					JSONObject json = JSONObject.parseObject(result);
