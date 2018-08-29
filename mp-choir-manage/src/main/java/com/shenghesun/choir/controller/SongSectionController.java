@@ -16,6 +16,7 @@ import com.shenghesun.common.BaseResponse;
 import com.shenghesun.dmh.service.DMHService;
 import com.shenghesun.entity.Choir;
 import com.shenghesun.entity.SongSection;
+import com.shenghesun.entity.SongSection.SectionStatusEnum;
 import com.shenghesun.service.SongSectionService;
 import com.shenghesun.util.DateUtil;
 import com.shenghesun.util.PropertyConfigurer;
@@ -155,5 +156,32 @@ public class SongSectionController {
             return response;
         }
     }
-
+    
+    /**
+     * 认领歌曲
+     * @Title: claim 
+     * @Description: TODO 
+     * @param id
+     * @param userId
+     * @return  BaseResponse 
+     * @author yangzp
+     * @date 2018年8月29日上午11:54:38
+     **/ 
+    @RequestMapping("/claim")
+    public BaseResponse claim(Long id, Long userId) {
+        BaseResponse response = new BaseResponse();
+        try {
+            SongSection songSection = songSectionService.findById(id);
+            if(songSection != null) {
+            	songSection.setUserId(userId);
+            	songSection.setStatus(SectionStatusEnum.NO_RECORDING);
+            	songSectionService.save(songSection);
+            }
+        } catch (Exception e) {
+            logger.error("Exception {} in {} ", e.getMessage(), "claim");
+            response.setSuccess(false);
+            return response;
+        }
+        return response;
+    }
 }

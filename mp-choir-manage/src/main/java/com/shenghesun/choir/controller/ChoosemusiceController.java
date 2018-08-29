@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.shenghesun.common.BaseResponse;
 import com.shenghesun.dmh.service.DMHService;
+import com.shenghesun.util.SignatureConstants;
 
  /**
   * 选歌
@@ -39,6 +40,8 @@ public class ChoosemusiceController {
 	@ResponseBody
 	public Object getMusice() {
 		BaseResponse response = new BaseResponse();
+		//Girls & Boys (Originally Performed by Good Charlotte) [Karaoke Version],Ring Ring Ring
+		//String result = dmhService.searchInSearch(SignatureConstants.SHOW_SONGS, 1,20);
 		String result = dmhService.searchInSearch("Girls & Boys (Originally Performed by Good Charlotte) [Karaoke Version],Ring Ring Ring", 1,20);
 		List<JSONObject> arry = new ArrayList<>();
 		if(StringUtils.isNotEmpty(result)) {
