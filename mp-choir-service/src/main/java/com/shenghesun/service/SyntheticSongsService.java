@@ -29,6 +29,9 @@ public class SyntheticSongsService {
     @Value("${upload.file.path}")
     private String audioFilePath;
 
+    @Value("${show.file.path}")
+    private String showFilePath;
+
     public SyntheticSongs findById(Long id) {
         if (id == null || id < 1) {
             return null;
@@ -76,7 +79,7 @@ public class SyntheticSongsService {
         }
         String wxacodePath = syntheticSongs.getWxacodePath();
         if (StringUtils.isNotBlank(wxacodePath)) {
-            return this.audioFilePath + wxacodePath;
+            return "http://192.168.3.37:9090"+this.showFilePath + wxacodePath;
         }
         String tokenResult = HttpClientService.httpGet("https://api.weixin.qq.com/cgi-bin/token?grant_type=" +
                 "client_credential&appid=wxd5d28f91e9c2c730&secret=bd68bcdc797acdd91e05083b4d111286", null);
@@ -93,11 +96,11 @@ public class SyntheticSongsService {
         try {
             InputStream inputStream = response.getEntity().getContent();
             String path = FileIOUtil.uploadFile("wxacode" + id + ".jpg", inputStream,
-                    "C:/home/shenghesun/temp/mpchoir/2018/0821/", false);
+                    audioFilePath, false);
             System.out.println(path);
             syntheticSongs.setWxacodePath(path);
             syntheticSongsDao.save(syntheticSongs);
-            return this.audioFilePath + path;
+            return "http://192.168.3.37:9090"+this.showFilePath + path;
         } catch (IOException e) {
             e.printStackTrace();
         }
