@@ -47,16 +47,11 @@ public class SyntheticSongsService {
         return syntheticSongsDao.findByChoirId(choirId);
     }
 
-    public List<SyntheticSongs> findMySyntheticSongs(String openId) {
-        if (StringUtils.isBlank(openId)) {
+    public List<SyntheticSongs> findMySyntheticSongs(Long userId) {
+        if (userId == null || userId < 1) {
             return null;
         }
-        User user = userService.findByOpenId(openId);
-        if (user == null) {
-            return null;
-        }
-        Long userId = user.getId();
-        return syntheticSongsDao.findByUserIdsLike("%," + userId + ",%");
+        return syntheticSongsDao.findByUserIdsLikeAndRemoved("%," + userId + ",%", false);
     }
 
     public String getWxacodePathByChoirId(Long choirId) {
@@ -80,7 +75,7 @@ public class SyntheticSongsService {
         }
         String wxacodePath = syntheticSongs.getWxacodePath();
         if (StringUtils.isNotBlank(wxacodePath)) {
-            return "http://192.168.3.37:9090"+this.showFilePath + wxacodePath;
+            return "http://192.168.3.37:9090" + this.showFilePath + wxacodePath;
         }
         String tokenResult = HttpClientService.httpGet("https://api.weixin.qq.com/cgi-bin/token?grant_type=" +
                 "client_credential&appid=wxd5d28f91e9c2c730&secret=bd68bcdc797acdd91e05083b4d111286", null);
@@ -101,7 +96,7 @@ public class SyntheticSongsService {
             System.out.println(path);
             syntheticSongs.setWxacodePath(path);
             syntheticSongsDao.save(syntheticSongs);
-            return "http://192.168.3.37:9090"+this.showFilePath + path;
+            return "http://192.168.3.37:9090" + this.showFilePath + path;
         } catch (IOException e) {
             e.printStackTrace();
         }

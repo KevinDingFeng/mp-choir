@@ -43,10 +43,11 @@ public class SyntheticSongsController {
     private SongSectionService songSectionService;
 
     @RequestMapping("/my_songs")
-    public BaseResponse mySongs(@RequestParam String openId) {
+    public BaseResponse mySongs(@RequestParam Long userId) {
+        userId = 1L;
         BaseResponse response = new BaseResponse();
         try {
-            List<SyntheticSongs> mySyntheticSongs = syntheticSongsService.findMySyntheticSongs(openId);
+            List<SyntheticSongs> mySyntheticSongs = syntheticSongsService.findMySyntheticSongs(userId);
             response.setData(mySyntheticSongs);
         } catch (Exception e) {
             response.setExtraMessage(e.getMessage());
@@ -65,7 +66,7 @@ public class SyntheticSongsController {
             SyntheticSongs syntheticSong = syntheticSongsService.findById(id);
             jsonObject.put("syntheticSong", syntheticSong);
             if (syntheticSong != null) {
-                Choir choir = choirService.getForUpdate(syntheticSong.getChoirId());
+                Choir choir = choirService.getForUpdate(syntheticSong.getChoir().getId());
                 jsonObject.put("choir", choir);
             }
             response.setData(jsonObject);
@@ -143,36 +144,58 @@ public class SyntheticSongsController {
     public BaseResponse compound(Long choirId) {
         BaseResponse response = new BaseResponse();
         try {
-        	List<SongSection> ssList = songSectionService.findByChoirId(choirId);
-        	if(!CollectionUtils.isEmpty(ssList)) {
-        		//根路径
-        		String basePath = propertyConfigurer.getShowFilePath();
-        		//子路径
-        		String subPath = FileIOUtil.generateSubPathStr();
-        		//合成后的文件
-        		File songFile = CutMusic.createFile(basePath + subPath,choirId+".mp3");
-        		StringBuffer userIdBff = new StringBuffer(",");
-        		for(SongSection ss : ssList) {
-        			userIdBff.append(ss.getUserId() + ",");
-        			if(StringUtils.isNotEmpty(ss.getAudioPath())) {
-        				File audioFile = new File(basePath + ss.getAudioPath());
-        				CutMusic.compoundTargetMp3File(songFile, audioFile);
-        			}
-        		}
-        		
-        		SyntheticSongs syntheticSongs = new SyntheticSongs();
-        		syntheticSongs.setChoirId(choirId);
-        		syntheticSongs.setSongPath(subPath + choirId +".mp3");
-        		syntheticSongs.setUserIds(userIdBff.toString());
-        		
-        		syntheticSongsService.save(syntheticSongs);
-        	}
-        	
+            List<SongSection> ssList = songSectionService.findByChoirId(choirId);
+            if (!CollectionUtils.isEmpty(ssList)) {
+                //根路径
+                String basePath = propertyConfigurer.getShowFilePath();
+                //子路径
+                String subPath = FileIOUtil.generateSubPathStr();
+                //合成后的文件
+                File songFile = CutMusic.createFile(basePath + subPath, choirId + ".mp3");
+                StringBuffer userIdBff = new StringBuffer();
+                for (SongSection ss : ssList) {
+                    userIdBff.append(ss.getUserId() + ",");
+                    if (StringUtils.isNotEmpty(ss.getAudioPath())) {
+                        File audioFile = new File(basePath + ss.getAudioPath());
+                        CutMusic.compoundTargetMp3File(songFile, audioFile);
+                    }
+                }
+
+                SyntheticSongs syntheticSongs = new SyntheticSongs();
+                syntheticSongs.setChoir(choirService.getForUpdate(choirId));
+                syntheticSongs.setSongPath(subPath + choirId + ".mp3");
+                syntheticSongs.setUserIds(userIdBff.toString());
+
+                syntheticSongsService.save(syntheticSongs);
+            }
+
         } catch (Exception e) {
             logger.error("Exception {} in {} ", e.getMessage(), "claim");
             response.setSuccess(false);
             return response;
         }
         return response;
+    }
+
+    @RequestMapping("/remove/{id}")
+    public BaseResponse remove(@PathVariable Long id) {
+        BaseResponse response = new BaseResponse();
+        try {
+            SyntheticSongs song = syntheticSongsService.findById(id);
+            if (song == null) {
+                response.setSuccess(false);
+                response.setMessage("歌曲不存在");
+            }
+            song.setRemoved(true);
+            syntheticSongsService.save(song);
+            response.setSuccess(true);
+            response.setMessage("操作成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setSuccess(false);
+            response.setMessage(e.getMessage());
+        } finally {
+            return response;
+        }
     }
 }

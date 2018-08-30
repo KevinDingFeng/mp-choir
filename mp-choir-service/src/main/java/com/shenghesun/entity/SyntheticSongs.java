@@ -2,9 +2,7 @@ package com.shenghesun.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,8 +27,12 @@ public class SyntheticSongs extends BaseEntity implements Serializable{
 	/**
 	 * 合唱团id
 	 */
-	@Column
-	private Long choirId;
+//	@Column
+//	private Long choirId;
+
+	@ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.MERGE)
+	@JoinColumn(name = "choir_id")
+	private Choir choir;
 	
 	/**
 	 * 合唱成员id，逗号分隔
@@ -46,4 +48,6 @@ public class SyntheticSongs extends BaseEntity implements Serializable{
 
 	@Column
 	private String wxacodePath;
+
+	private boolean removed;
 }
