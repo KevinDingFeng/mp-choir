@@ -19,9 +19,14 @@ public class UrlConstants {
     public static final String TRACKLIST_GETTRACKLISTBYCATGORY = "/TRACKLIST/getTrackListByCatgory.json";
     
     /**
+     * 可快速查询可用的所有专辑信息。
+     */
+    public static final String ALBUM_GETALLALBUMSAP = "/ALBUM/albumGetAll.json";
+    
+    /**
      * 查询当前已授权可使用的所有专辑列表。
      */
-    public static final String ALBUM_ALBUMGETALL = "/ALBUM/albumGetAll.json";
+    public static final String ALBUM_ALBUMGETALL = "/ALBUM/getAllAlbumSap.json";
     
     /**
      * 通过专辑唯一码(albumAssetCode), 获取专辑下的单曲列表。

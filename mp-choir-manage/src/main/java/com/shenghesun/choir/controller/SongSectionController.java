@@ -1,6 +1,7 @@
 package com.shenghesun.choir.controller;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -194,6 +195,7 @@ public class SongSectionController {
             if(songSection != null) {
             	songSection.setUserId(userId);
             	songSection.setStatus(SectionStatusEnum.NO_RECORDING);
+            	songSection.setPastTime(new Timestamp(System.currentTimeMillis()+20*60*1000));
             	songSectionService.save(songSection);
             }
         } catch (Exception e) {
