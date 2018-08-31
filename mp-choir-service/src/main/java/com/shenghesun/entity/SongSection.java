@@ -1,6 +1,7 @@
 package com.shenghesun.entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
@@ -106,5 +108,14 @@ public class SongSection extends BaseEntity implements Serializable {
 			return text;
 		}
     }
+    
+    @Column
+    @JsonFormat(timezone="GMT+8")
+	private Timestamp pastTime;
+    
+    public static void main(String[] args) {
+		System.out.println(System.currentTimeMillis());
+		System.out.println(System.currentTimeMillis()+20*60*1000);
+	}
 
 }

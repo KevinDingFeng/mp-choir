@@ -84,6 +84,15 @@ public class DMHService {
 		return postDMHService(dataMap);
 	}
 	
+	public String getAllAlbumSap(int pageNo, int pageSize) {
+		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put(DMHConstants.ACTION, UrlConstants.ALBUM_GETALLALBUMSAP);
+		dataMap.put(DMHConstants.PAGE_NO, pageNo);
+		dataMap.put(DMHConstants.PAGE_SIZE, pageSize);
+		
+		return postDMHService(dataMap);
+	}
+	
 	/**
 	 * 通过专辑唯一码(albumAssetCode), 获取专辑下的单曲列表。
 	 * @Title: albumGetSong 
@@ -241,7 +250,7 @@ public class DMHService {
 		//dataMap.put("language", "英语");
 		//dataMap.put("artistName", artistName);
 		dataMap.put("trackTitle", trackTitle);
-		dataMap.put("searchType", 1);
+		dataMap.put("searchType", 2);
 		
 		dataMap.put(DMHConstants.PAGE_NO, pageNo);
 		dataMap.put(DMHConstants.PAGE_SIZE, pageSize);
