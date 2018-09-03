@@ -44,7 +44,6 @@ public class SyntheticSongsController {
 
     @RequestMapping("/my_songs")
     public BaseResponse mySongs(@RequestParam Long userId) {
-        userId = 1L;
         BaseResponse response = new BaseResponse();
         try {
             List<SyntheticSongs> mySyntheticSongs = syntheticSongsService.findMySyntheticSongs(userId);
@@ -53,9 +52,9 @@ public class SyntheticSongsController {
             response.setExtraMessage(e.getMessage());
             response.setErrorCode(400);
             response.setMessage("操作失败");
-        } finally {
             return response;
         }
+        return response;
     }
 
     @RequestMapping("/{id}/detail")
@@ -74,9 +73,9 @@ public class SyntheticSongsController {
             response.setExtraMessage(e.getMessage());
             response.setErrorCode(400);
             response.setMessage("操作失败");
-        } finally {
             return response;
         }
+        return response;
     }
 
     @RequestMapping("/{choirId}/detail_by_choir")
@@ -92,12 +91,13 @@ public class SyntheticSongsController {
             }
             response.setData(jsonObject);
         } catch (Exception e) {
+        	logger.error("Exception {} in {} ", e.getMessage(), "detailChoirId");
             response.setExtraMessage(e.getMessage());
             response.setErrorCode(400);
             response.setMessage("操作失败");
-        } finally {
             return response;
         }
+        return response;
     }
 
     @RequestMapping("{id}/wxacode")
@@ -147,7 +147,7 @@ public class SyntheticSongsController {
             List<SongSection> ssList = songSectionService.findByChoirId(choirId);
             if (!CollectionUtils.isEmpty(ssList)) {
                 //根路径
-                String basePath = propertyConfigurer.getShowFilePath();
+                String basePath = propertyConfigurer.getUploadFilePath();
                 //子路径
                 String subPath = FileIOUtil.generateSubPathStr();
                 //合成后的文件
@@ -160,13 +160,21 @@ public class SyntheticSongsController {
                         CutMusic.compoundTargetMp3File(songFile, audioFile);
                     }
                 }
+                SyntheticSongs syntheticSong = syntheticSongsService.findByChoirId(choirId);
+                if(syntheticSong==null) {
+                	syntheticSong = new SyntheticSongs();
+                }
+                syntheticSong.setChoir(choirService.getForUpdate(choirId));
+                syntheticSong.setSongPath(subPath + choirId + ".mp3");
+                syntheticSong.setUserIds(userIdBff.toString());
 
-                SyntheticSongs syntheticSongs = new SyntheticSongs();
-                syntheticSongs.setChoir(choirService.getForUpdate(choirId));
-                syntheticSongs.setSongPath(subPath + choirId + ".mp3");
-                syntheticSongs.setUserIds(userIdBff.toString());
-
-                syntheticSongsService.save(syntheticSongs);
+                syntheticSongsService.save(syntheticSong);
+                
+                //修改 团已合成
+                Choir choir = choirService.getForUpdate(choirId);
+                choir.setStatus(1);
+                choirService.save(choir);
+                
             }
 
         } catch (Exception e) {
@@ -194,8 +202,8 @@ public class SyntheticSongsController {
             e.printStackTrace();
             response.setSuccess(false);
             response.setMessage(e.getMessage());
-        } finally {
             return response;
         }
+        return response;
     }
 }

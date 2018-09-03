@@ -18,6 +18,7 @@ import com.shenghesun.dmh.service.DMHService;
 import com.shenghesun.entity.Choir;
 import com.shenghesun.entity.SongSection;
 import com.shenghesun.entity.SongSection.SectionStatusEnum;
+import com.shenghesun.service.ChoirService;
 import com.shenghesun.service.SongSectionService;
 import com.shenghesun.util.DateUtil;
 import com.shenghesun.util.PropertyConfigurer;
@@ -37,10 +38,21 @@ public class SongSectionController {
 
     @Autowired
     private DMHService dmhService;
+    
+    @Autowired
+	private ChoirService choirService;
 
+    /**
+     * 正在创作
+     * @Title: mySongSection 
+     * @Description: TODO 
+     * @param userId
+     * @return  BaseResponse 
+     * @author yangzp
+     * @date 2018年9月3日下午8:46:04
+     **/ 
     @RequestMapping("/my_song_section")
     public BaseResponse mySongSection(@RequestParam Long userId) {
-        userId = 1L;
         BaseResponse response = new BaseResponse();
         try {
             List<SongSection> mySections = songSectionService.findMySection(userId);
@@ -51,11 +63,20 @@ public class SongSectionController {
             response.setErrorCode(400);
             response.setMessage("操作失败");
             response.setExtraMessage(e.getMessage());
-        } finally {
             return response;
         }
+        return response;
     }
 
+    /**
+     * 我的作品
+     * @Title: getMyWritting 
+     * @Description: TODO 
+     * @param userId
+     * @return  BaseResponse 
+     * @author yangzp
+     * @date 2018年9月3日下午8:46:32
+     **/ 
     @RequestMapping("/my_writting")
     public BaseResponse getMyWritting(@RequestParam Long userId) {
         userId = 1L;
@@ -69,9 +90,9 @@ public class SongSectionController {
             response.setErrorCode(400);
             response.setMessage("操作失败");
             response.setExtraMessage(e.getMessage());
-        } finally {
             return response;
         }
+        return response;
     }
 
     /**
@@ -148,18 +169,24 @@ public class SongSectionController {
         } catch (Exception e) {
             response.setSuccess(false);
             response.setMessage(e.getMessage());
-        } finally {
             return response;
         }
-
+        return response;
     }
 
     @RequestMapping(value = "/{sectionId}/upload", method = RequestMethod.POST)
-    public BaseResponse audioUpload(@PathVariable Long sectionId, @RequestParam("audioFile") MultipartFile audioFile) {
+    public BaseResponse audioUpload(@PathVariable Long sectionId,
+    		Long choirId,
+    		@RequestParam("audioFile") MultipartFile audioFile) {
         System.out.println("进入后台上传方法");
         BaseResponse response = new BaseResponse();
         try {
             if (songSectionService.uploadAudioFile(sectionId, audioFile)) {
+            	//团完成数+1
+            	Choir choir = choirService.getForUpdate(choirId);
+            	choir.setCompleteNum(choir.getCompleteNum()+1);
+            	choirService.save(choir);
+            	
                 response.setSuccess(true);
                 response.setMessage("上传成功");
                 return response;
