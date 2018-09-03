@@ -1,28 +1,27 @@
 package com.shenghesun.service;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.shenghesun.dao.SyntheticSongsDao;
-import com.shenghesun.entity.SongSection;
-import com.shenghesun.entity.SyntheticSongs;
-import com.shenghesun.entity.User;
-import com.shenghesun.util.FileIOUtil;
-import com.shenghesun.util.HttpClientService;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.shenghesun.dao.SyntheticSongsDao;
+import com.shenghesun.entity.SyntheticSongs;
+import com.shenghesun.util.FileIOUtil;
+import com.shenghesun.util.HttpClientService;
 
 @Service
 public class SyntheticSongsService {
 
-    @Autowired
-    private UserService userService;
+//    @Autowired
+//    private UserService userService;
 
     @Autowired
     private SyntheticSongsDao syntheticSongsDao;
@@ -32,6 +31,9 @@ public class SyntheticSongsService {
 
     @Value("${show.file.path}")
     private String showFilePath;
+    
+    @Value("${server.host.url}")
+    private String hostUrl;
 
     public SyntheticSongs findById(Long id) {
         if (id == null || id < 1) {
@@ -75,7 +77,7 @@ public class SyntheticSongsService {
         }
         String wxacodePath = syntheticSongs.getWxacodePath();
         if (StringUtils.isNotBlank(wxacodePath)) {
-            return "http://192.168.3.37:9090" + this.showFilePath + wxacodePath;
+            return hostUrl + this.showFilePath + wxacodePath;
         }
         String tokenResult = HttpClientService.httpGet("https://api.weixin.qq.com/cgi-bin/token?grant_type=" +
                 "client_credential&appid=wxd5d28f91e9c2c730&secret=bd68bcdc797acdd91e05083b4d111286", null);
@@ -96,7 +98,7 @@ public class SyntheticSongsService {
             System.out.println(path);
             syntheticSongs.setWxacodePath(path);
             syntheticSongsDao.save(syntheticSongs);
-            return "http://192.168.3.37:9090" + this.showFilePath + path;
+            return hostUrl + this.showFilePath + path;
         } catch (IOException e) {
             e.printStackTrace();
         }
