@@ -42,28 +42,40 @@ public class ChoosemusiceController {
 		BaseResponse response = new BaseResponse();
 		//Girls & Boys (Originally Performed by Good Charlotte) [Karaoke Version],Ring Ring Ring
 		//String result = dmhService.searchInSearch(SignatureConstants.SHOW_SONGS, 1,20);
-		String result = dmhService.searchInSearch("Girls & Boys (Originally Performed by Good Charlotte) [Karaoke Version],Ring Ring Ring", 1,20);
+		//String result = dmhService.searchInSearch("Girls & Boys (Originally Performed by Good Charlotte) [Karaoke Version],Ring Ring Ring", 1,20);
+		//String result = dmhService.trackInfo("T10022844688");
 		List<JSONObject> arry = new ArrayList<>();
-		if(StringUtils.isNotEmpty(result)) {
-			JSONObject json = JSONObject.parseObject(result);
-			JSONObject dataNode = json.getJSONObject("data");
-			JSONArray resultArry = dataNode.getJSONArray("result");
-			if(resultArry.size()>0) {
-				for(int i=0; i < resultArry.size(); i++) {
-					JSONObject jo = resultArry.getJSONObject(i); 
-					String assetId = jo.getString("assetId");
-					if(StringUtils.isNotEmpty(assetId)) {
-						String track = dmhService.trackLink(assetId, 128);
-						if(StringUtils.isNotEmpty(track)) {
-							JSONObject trackJo = JSONObject.parseObject(track);
-							//JSONArray trackArry = trackJo.getJSONArray("data");
-							arry.add(trackJo.getJSONObject("data"));
-						}
-					}
-				}
-			}
+//		if(StringUtils.isNotEmpty(result)) {
+//			JSONObject json = JSONObject.parseObject(result);
+//			JSONObject dataNode = json.getJSONObject("data");
+//			JSONArray resultArry = dataNode.getJSONArray("result");
+//			if(resultArry.size()>0) {
+//				for(int i=0; i < resultArry.size(); i++) {
+//					JSONObject jo = resultArry.getJSONObject(i); 
+//					String assetId = jo.getString("assetId");
+//					if(StringUtils.isNotEmpty(assetId)) {
+//						String track = dmhService.trackLink(assetId, 128);
+//						if(StringUtils.isNotEmpty(track)) {
+//							JSONObject trackJo = JSONObject.parseObject(track);
+//							//JSONArray trackArry = trackJo.getJSONArray("data");
+//							arry.add(trackJo.getJSONObject("data"));
+//						}
+//					}
+//				}
+//			}
+//			response.setData(arry);
+//			return response;
+//		}
+		
+		String track = dmhService.trackLink("T10022844688", 128);
+		if(StringUtils.isNotEmpty(track)) {
+			JSONObject trackJo = JSONObject.parseObject(track);
+			//JSONArray trackArry = trackJo.getJSONArray("data");
+			arry.add(trackJo.getJSONObject("data"));
+			
 			response.setData(arry);
 			return response;
+
 		}
 		response.setErrorCode(-1);
 		return response;
