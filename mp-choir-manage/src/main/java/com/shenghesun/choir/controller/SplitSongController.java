@@ -70,7 +70,7 @@ public class SplitSongController {
 			}
 			//根据歌名获取分段时间信息
 			//List<SplitSongDuration> ssdList = splitSongDurationService.findBySongName(ctemp.getSongName(), ctemp.getPopulation());
-			List<SplitSongDuration> ssdList = splitSongDurationService.findBySongName("葫芦娃", 3);
+			List<SplitSongDuration> ssdList = splitSongDurationService.findBySongName("葫芦娃", ctemp.getPopulation());
 			if(!CollectionUtils.isEmpty(ssdList)) {
 				SplitSongDuration ssd = ssdList.get(0);
 				//0(音频起始秒数),10(切割音频的长度);10,12;22,10

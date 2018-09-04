@@ -20,7 +20,7 @@ public class BackgroundMusicController {
         BaseResponse response = new BaseResponse();
         try {
             //BackgroundMusic backgroundMusic = backgroundMusicService.getBackgroundMusicInfo(name, population, sort);
-            BackgroundMusic backgroundMusic = backgroundMusicService.getBackgroundMusicInfo("葫芦娃", 3, 0);
+            BackgroundMusic backgroundMusic = backgroundMusicService.getBackgroundMusicInfo("葫芦娃", population, sort);
             response.setSuccess(true);
             response.setData(backgroundMusic);
         } catch (Exception e) {
