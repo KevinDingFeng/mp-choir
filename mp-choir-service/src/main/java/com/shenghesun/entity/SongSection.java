@@ -88,7 +88,7 @@ public class SongSection extends BaseEntity implements Serializable {
     /**
      * 录音文件地址
      */
-    @Column(length = 100)
+    @Column(length = 200)
     private String audioPath;
     
     @Column(nullable = false, length = 50)

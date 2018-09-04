@@ -19,15 +19,16 @@ public class BackgroundMusicController {
     public BaseResponse getBackgroundMusicInfo(@RequestParam String name, @RequestParam Integer population, @RequestParam Integer sort) {
         BaseResponse response = new BaseResponse();
         try {
-            BackgroundMusic backgroundMusic = backgroundMusicService.getBackgroundMusicInfo(name, population, sort);
+            //BackgroundMusic backgroundMusic = backgroundMusicService.getBackgroundMusicInfo(name, population, sort);
+            BackgroundMusic backgroundMusic = backgroundMusicService.getBackgroundMusicInfo("葫芦娃", 3, 0);
             response.setSuccess(true);
             response.setData(backgroundMusic);
         } catch (Exception e) {
             response.setSuccess(false);
             response.setMessage(e.getMessage());
-        } finally {
             return response;
         }
+        return response;
     }
 
 }
