@@ -303,14 +303,16 @@ public class CutMusic {
 	
 	public static void main(String[] args) throws Exception {
 		// f1,f2分别为需要剪切的歌曲路径
-		File f1 = new File("C:\\Users\\yangzp\\Music\\贝瓦儿歌 - 我是小海军.mp3");
-		File f2 = new File("C:\\Users\\yangzp\\Music\\贝瓦儿歌 - 小毛驴.mp3");
-		// f为合并的歌曲
-		File f = createFile("C:/Users/yangzp/Music","MergeMusic22.mp3");
-		cut1(f2, f1, f);
+//		File f1 = new File("C:\\Users\\yangzp\\Music\\贝瓦儿歌 - 我是小海军.mp3");
+//		File f2 = new File("C:\\Users\\yangzp\\Music\\贝瓦儿歌 - 小毛驴.mp3");
+//		// f为合并的歌曲
+//		File f = createFile("C:/Users/yangzp/Music","MergeMusic22.mp3");
+//		cut1(f2, f1, f);
 //		
 //		getMp3Time(f2);
+		File sourceFile  = new File("F:\\文档\\小程序\\美拍合唱团\\背景音乐\\合唱物料\\伴奏\\未命名文件夹\\葫芦娃.mp3");
+		File targetFile  = new File("F:\\文档\\小程序\\美拍合唱团\\背景音乐\\合唱物料\\伴奏\\未命名文件夹\\葫芦娃\\605.mp3");
 		
-		generateTargetMp3File(f, f2,1000, 5000);
+		generateTargetMp3File(targetFile, sourceFile,26110,38590);
 	}
 }
