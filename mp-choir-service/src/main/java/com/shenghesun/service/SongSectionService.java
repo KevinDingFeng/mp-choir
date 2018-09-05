@@ -64,6 +64,10 @@ public class SongSectionService {
             }
         });
     }
+    
+    public List<SongSection> findByUserIdAndStatus(Long userId, SectionStatusEnum status) {
+    	return songSectionDao.findByUserIdAndStatus(userId, status);
+    }
 
     public List<Choir> findMyWritting(Long userId){
         if(userId == null || userId<1){

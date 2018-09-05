@@ -9,11 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.shenghesun.common.BaseResponse;
 import com.shenghesun.dmh.service.DMHService;
-import com.shenghesun.util.SignatureConstants;
 
  /**
   * 选歌
