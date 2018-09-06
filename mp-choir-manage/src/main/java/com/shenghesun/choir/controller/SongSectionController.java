@@ -56,7 +56,9 @@ public class SongSectionController {
         BaseResponse response = new BaseResponse();
         try {
             //List<SongSection> mySections = songSectionService.findMySection(userId);
-        	List<SongSection> mySections = songSectionService.findByUserIdAndStatus(userId, SectionStatusEnum.NO_RECORDING);
+        	
+        	List<SongSection> mySections = songSectionService.findByUserIdAndStatus(userId, 
+        			SectionStatusEnum.NO_RECORDING, new Timestamp(System.currentTimeMillis()));
             response.setData(mySections);
         } catch (Exception e) {
             e.printStackTrace();

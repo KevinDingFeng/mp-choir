@@ -1,6 +1,7 @@
 package com.shenghesun.service;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,8 +66,8 @@ public class SongSectionService {
         });
     }
     
-    public List<SongSection> findByUserIdAndStatus(Long userId, SectionStatusEnum status) {
-    	return songSectionDao.findByUserIdAndStatus(userId, status);
+    public List<SongSection> findByUserIdAndStatus(Long userId, SectionStatusEnum status, Timestamp pastTime) {
+    	return songSectionDao.findByUserIdAndStatusAndPastTimeGreaterThan(userId, status, pastTime);
     }
 
     public List<Choir> findMyWritting(Long userId){

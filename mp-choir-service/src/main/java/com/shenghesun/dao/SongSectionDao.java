@@ -1,5 +1,6 @@
 package com.shenghesun.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +15,5 @@ public interface SongSectionDao extends JpaRepository<SongSection, Long>, JpaSpe
 	
 	public List<SongSection> findByChoirIdOrderBySortAsc(Long id);
 	
-	public List<SongSection> findByUserIdAndStatus(Long userId, SectionStatusEnum status);
+	public List<SongSection> findByUserIdAndStatusAndPastTimeGreaterThan(Long userId, SectionStatusEnum status, Timestamp pastTime);
 }
