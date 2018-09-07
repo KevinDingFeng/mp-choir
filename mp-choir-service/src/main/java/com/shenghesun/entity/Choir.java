@@ -13,8 +13,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -23,9 +21,8 @@ import lombok.ToString;
 @Entity
 @Table
 @Data
-@ToString(exclude = {"users"})
+@ToString
 @EqualsAndHashCode(exclude = {"users"},callSuper = true)
-@JsonIgnoreProperties("users")
 public class Choir extends BaseEntity implements Serializable{
 
 	private static final long serialVersionUID = 5855327768914111196L;

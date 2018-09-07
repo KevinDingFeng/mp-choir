@@ -66,8 +66,8 @@ public class SongSectionService {
         });
     }
     
-    public List<SongSection> findByUserIdAndStatus(Long userId, SectionStatusEnum status, Timestamp pastTime) {
-    	return songSectionDao.findByUserIdAndStatusAndPastTimeGreaterThan(userId, status, pastTime);
+    public List<SongSection> findByUserIdAndStatus(Long userId, Timestamp pastTime) {
+    	return songSectionDao.findMySection(userId, pastTime);
     }
 
     public List<Choir> findMyWritting(Long userId){
