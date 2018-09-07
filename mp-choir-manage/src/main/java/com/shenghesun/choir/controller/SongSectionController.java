@@ -218,12 +218,13 @@ public class SongSectionController {
      * @date 2018年8月29日上午11:54:38
      **/ 
     @RequestMapping("/claim")
-    public BaseResponse claim(Long id, Long userId) {
+    public BaseResponse claim(Long id, Long userId,String avatarUrl) {
         BaseResponse response = new BaseResponse();
         try {
             SongSection songSection = songSectionService.findById(id);
             if(songSection != null) {
             	songSection.setUserId(userId);
+            	songSection.setAvatarUrl(avatarUrl);
             	songSection.setStatus(SectionStatusEnum.NO_RECORDING);
             	songSection.setPastTime(new Timestamp(System.currentTimeMillis()+20*60*1000));
             	songSectionService.save(songSection);

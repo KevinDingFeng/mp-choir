@@ -55,6 +55,12 @@ public class SongSection extends BaseEntity implements Serializable {
     private Long userId;
     
     /**
+     * 用户头像
+     */
+    @Column
+	private String avatarUrl;
+    
+    /**
      * 单曲的TSID
      */
     @Column
