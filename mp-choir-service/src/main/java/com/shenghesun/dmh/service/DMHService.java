@@ -247,13 +247,26 @@ public class DMHService {
 								int pageNo, int pageSize) {
 		Map<String, Object> dataMap = new HashMap<>();
 		dataMap.put(DMHConstants.ACTION, UrlConstants.SEARCH_INSEARCH);
-		//dataMap.put("language", "英语");
-		//dataMap.put("artistName", artistName);
-		dataMap.put("trackTitle", trackTitle);
-		dataMap.put("searchType", 2);
+		dataMap.put("genre", "");
+		dataMap.put("language", "");
 		
+		dataMap.put("relaseDataStart", "");
+		dataMap.put("relaseDataEnd", "");
+		dataMap.put("artistName", "");
+		dataMap.put("artistGender", "");
+		dataMap.put("artistBirthdayStart", "");
+		dataMap.put("artistBirthdayEnd", "");
+		dataMap.put("trackTitle", trackTitle);
+		dataMap.put("albumTitle", "");
+		dataMap.put("matchMode", "1");
+		dataMap.put("sortMode", "1");
 		dataMap.put(DMHConstants.PAGE_NO, pageNo);
 		dataMap.put(DMHConstants.PAGE_SIZE, pageSize);
+		dataMap.put("searchType", 1);
+		
+//		dataMap.put("tsid", "");
+//		dataMap.put("artistCode", "");
+//		dataMap.put("albumCode", "");
 		
 		return postDMHService(dataMap);
 	}

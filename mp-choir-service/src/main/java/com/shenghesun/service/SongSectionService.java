@@ -119,5 +119,19 @@ public class SongSectionService {
     public String getAudioFilePath() {
         return audioFilePath;
     }
+    
+    /**
+     * 获取已经过期的分段歌曲
+     * @Title: fingMySectionsPast 
+     * @Description: TODO 
+     * @param choirId
+     * @param pastTime
+     * @return  List<SongSection> 
+     * @author yangzp
+     * @date 2018年9月13日下午12:03:37
+     **/ 
+    public List<SongSection> fingMySectionsPast(Long choirId, Timestamp pastTime) {
+    	return songSectionDao.fingMySectionsPast(choirId, pastTime);
+    }
 
 }

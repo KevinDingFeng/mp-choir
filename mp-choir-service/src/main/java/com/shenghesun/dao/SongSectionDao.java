@@ -21,4 +21,17 @@ public interface SongSectionDao extends JpaRepository<SongSection, Long>, JpaSpe
 	@Query("SELECT ss FROM SongSection ss where ss.userId = ?1 and (ss.status = 'NO_RECORDING' or ss.status = 'RECORDED') and ss.choir.status=0 and ss.pastTime>?2")
 	public List<SongSection> findMySection(Long userId, Timestamp pastTime);
 	
+	/**
+	 * 获取已经过期的
+	 * @Title: fingMySectionsPast 
+	 * @Description: TODO 
+	 * @param userId
+	 * @param pastTime
+	 * @return  List<SongSection> 
+	 * @author yangzp
+	 * @date 2018年9月13日上午11:30:04
+	 **/ 
+	@Query("SELECT ss FROM SongSection ss where ss.choir.id = ?1 and ss.status = 'NO_RECORDING' and ss.pastTime<?2")
+	public List<SongSection> fingMySectionsPast(Long choirId, Timestamp pastTime);
+	
 }

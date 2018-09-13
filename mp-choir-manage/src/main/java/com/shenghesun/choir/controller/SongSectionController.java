@@ -110,6 +110,17 @@ public class SongSectionController {
     public BaseResponse getSectionSong(Long choirId) {
         BaseResponse response = new BaseResponse();
         try {
+        	//获取已经过时的
+        	List<SongSection> pastList = songSectionService.fingMySectionsPast(choirId, new Timestamp(System.currentTimeMillis()));
+        	if(!CollectionUtils.isEmpty(pastList)) {
+        		for(SongSection ss: pastList) {
+        			ss.setPastTime(null);
+        			ss.setAvatarUrl(null);
+        			ss.setUserId(null);
+        			ss.setStatus(SectionStatusEnum.NO_CLAIM);
+        			songSectionService.save(ss);
+        		}
+        	}
             List<SongSection> ssList = songSectionService.findByChoirId(choirId);
             Choir resultChoir = new Choir();
             if (!CollectionUtils.isEmpty(ssList)) {
