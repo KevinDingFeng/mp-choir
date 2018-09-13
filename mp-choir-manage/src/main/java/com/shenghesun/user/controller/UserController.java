@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -16,10 +17,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shenghesun.common.BaseResponse;
+import com.shenghesun.core.exception.ApiException;
 import com.shenghesun.dmh.service.DMHService;
 import com.shenghesun.entity.User;
 import com.shenghesun.service.UserService;
 import com.shenghesun.util.RedisUtil;
+import com.shenghesun.util.dmh.OpenApiLogin;
+import com.shenghesun.util.dmh.OpenApiLoginModel;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
@@ -40,6 +44,17 @@ public class UserController {
     private WxMaService wxService;
     @Autowired
     private DMHService dmhService;
+    @Autowired
+    private OpenApiLogin openApiLogin;
+    
+    @RequestMapping(value="/getPublicKey",method = RequestMethod.GET)
+	@ResponseBody
+	public String getPublicKey() throws ApiException {
+		
+		OpenApiLoginModel oal = openApiLogin.getPublicKey();
+		
+		return "cookie="+oal.getCookie()+"<br>"+"publicKey="+oal.getPublicKey();
+	}
 	
 	/**
 	 * 测试接口
@@ -50,29 +65,43 @@ public class UserController {
 	 * @author yangzp
 	 * @date 2018年8月9日下午4:47:33
 	 **/ 
-	@RequestMapping(value="/demo/{name}",method = RequestMethod.GET)
+	@RequestMapping(value="/demo/{name}/{tsid}",method = RequestMethod.GET)
 	@ResponseBody
-	public String demoShowName(@PathVariable String name) {
+	public String demoShowName(@PathVariable String name,@PathVariable String tsid) {
 		logger.debug("访问getUserByName,Name={}", name);
 //		String setSpUserBizID = dmhService.setSpUserBizID(29);
 //		System.out.println("setSpUserBizID="+setSpUserBizID);
 		//查询当前已授权可使用的所有专辑列表。
-		//String result = dmhService.albumGetAll(1, 10);
+//		String albumGetAll = dmhService.albumGetAll(1, 10);
+//		System.out.println("albumGetAll="+albumGetAll);
+		
+		//通过此接口，可快速查询可用的所有专辑信息。
+//		String getAllAlbumSap = dmhService.getAllAlbumSap(1, 2);
+//		System.out.println("getAllAlbumSap="+getAllAlbumSap);
+		
 		//通过专辑唯一码(albumAssetCode), 获取专辑下的单曲列表。
-		//String result = dmhService.albumGetSong("P10000971760",1, 10);
-		//String result = dmhService.trackInfo("T10022844688");
-		//String result = dmhService.trackLink("T10033153645", 320);//128,320
-//		String creatShort = dmhService.creatShort("T10022844688",1, 2);
+//		String albumGetSong = dmhService.albumGetSong("P10001438232",1, 10);
+//		System.out.println("albumGetSong="+albumGetSong);
+		
+		//通过单曲的TSID(又名assetId)，查询单曲的详细信息。
+		String trackInfo = dmhService.trackInfo(tsid);
+//		System.out.println("trackInfo="+trackInfo);
+		//通过单曲的TSID，获取单曲的播放链接
+		String trackLink = dmhService.trackLink(tsid, 128);//128,320
+		
+//		String creatShort = dmhService.creatShort("T10036948802",1, 2);
 //		System.out.println("creatShort="+creatShort);
-		String searchMerge = dmhService.searchMerge("葫芦娃",1, 1,20);
+		String searchMerge = dmhService.searchMerge(name,1, 1,20);
 		System.out.println("searchMerge="+searchMerge);
-		String searchInSearch = dmhService.searchInSearch("好汉歌", 1,20);
+		//设置当前要启用的服务 29:短音频\/短视频
+		//dmhService.setSpUserBizID(24);
+		String searchInSearch = dmhService.searchInSearch(name, 1,20);
 		System.out.println("searchInSearch="+searchInSearch);
 //		String getSpSessionBizList = dmhService.getSpSessionBizList();
 //		System.out.println("getSpSessionBizList="+getSpSessionBizList);
-		
+		String result ="trackInfo"+ trackInfo +"<br><br>"+"trackLink="+trackLink+"<br><br>"+"searchMerge="+searchMerge + "<br><br>" +"searchInSearch="+searchInSearch;
 		//String result = dmhService.selectShortRate("T10033153645", "150",128);
-		return "name is  " + searchMerge;
+		return result;
 	}
 	
 	/**
@@ -106,6 +135,47 @@ public class UserController {
         if(user == null) {
         	user = new User();
             BeanUtils.copyProperties(userInfo, user);
+            User dbUser = userService.save(user);
+            data.put("userId", dbUser.getId());
+        }else {
+        	if(StringUtils.isEmpty(user.getNickName())) {
+        		BeanUtils.copyProperties(userInfo, user);
+                userService.save(user);
+        	}
+        	data.put("userId", user.getId());
+        }
+        
+        response.setData(data);
+		return response;
+	}
+	
+	/**
+	 * 无授权登陆
+	 * @Title: unauthorizedLogin 
+	 * @Description: TODO 
+	 * @param code
+	 * @return
+	 * @throws WxErrorException  Object 
+	 * @author yangzp
+	 * @date 2018年9月12日下午6:20:43
+	 **/ 
+	@GetMapping("unauthorizedLogin")
+	@ResponseBody
+	public Object unauthorizedLogin(String code) throws WxErrorException {
+		
+		BaseResponse response = new BaseResponse();
+		WxMaJscode2SessionResult session = this.wxService.getUserService().getSessionInfo(code);
+		//String sessionKey = session.getSessionKey();
+		//通过openId sessionKey 生成3rd session 返回给客户端小程序
+		String accessToken = UUID.randomUUID().toString();
+		//redisUtil.set(accessToken, sessionKey + ":" + session.getOpenid(), BaseResponse.ex);
+        Map<String, Object> data = new HashMap<>();
+        data.put("accessToken", accessToken);
+        //往mysql 中插入user 信息 插入前判断是否已经存在， 存在则进行更新
+        User user = userService.findByOpenId(session.getOpenid());
+        if(user == null) {
+        	user = new User();
+        	user.setOpenId(session.getOpenid());
             User dbUser = userService.save(user);
             data.put("userId", dbUser.getId());
         }else {

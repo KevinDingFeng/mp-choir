@@ -221,6 +221,11 @@ public class SongSectionController {
         try {
             SongSection songSection = songSectionService.findById(id);
             if(songSection != null) {
+            	if(songSection.getUserId() != null && songSection.getUserId()>0) {
+            		response.setExtraMessage("CLAIM");
+            		return response;
+            	}
+            	
             	songSection.setUserId(userId);
             	songSection.setAvatarUrl(avatarUrl);
             	songSection.setStatus(SectionStatusEnum.NO_RECORDING);

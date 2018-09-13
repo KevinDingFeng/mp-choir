@@ -58,16 +58,20 @@ public class SplitSongController {
 	public Object splitSong(Choir choir) {
 		BaseResponse response = new BaseResponse();
 		try {
+			
+			//获取以前分段数据并删除
+			List<SongSection> songSections = songSectionService.findByChoirId(choir.getId());
+			if(!CollectionUtils.isEmpty(songSections)) {
+				//songSectionService.delete(songSections);
+				return response;
+			}
+			
 			//修改团：歌名，歌手
 			Choir ctemp = choirService.getForUpdate(choir.getId());
 			ctemp.setSinger(choir.getSinger());
 			ctemp.setSongName(choir.getSongName());
 			choirService.save(ctemp);
-			//获取以前分段数据并删除
-			List<SongSection> songSections = songSectionService.findByChoirId(choir.getId());
-			if(!CollectionUtils.isEmpty(songSections)) {
-				songSectionService.delete(songSections);
-			}
+			
 			//根据歌名获取分段时间信息
 			//List<SplitSongDuration> ssdList = splitSongDurationService.findBySongName(ctemp.getSongName(), ctemp.getPopulation());
 			List<SplitSongDuration> ssdList = splitSongDurationService.findBySongName("葫芦娃", ctemp.getPopulation());
