@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface SyntheticSongsDao extends JpaRepository<SyntheticSongs, Long>, JpaSpecificationExecutor<SyntheticSongs> {
 
-    List<SyntheticSongs> findByUserIdsLikeAndRemoved(String userId, boolean removed);
+    List<SyntheticSongs> findByUserIdsLikeAndRemovedOrderByLastModifiedDesc(String userId, boolean removed);
 
     SyntheticSongs findByChoirId(Long choirId);
 

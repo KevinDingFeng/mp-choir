@@ -104,6 +104,18 @@ public class UserController {
 		return result;
 	}
 	
+	@RequestMapping(value="/creatShort/{tsid}/{startOffset}/{duration}",method = RequestMethod.GET)
+	@ResponseBody
+	public String creatShort(@PathVariable String tsid,@PathVariable String startOffset,@PathVariable String duration) {
+		logger.debug("访问getUserByName,Name={}", tsid);
+		
+		String creatShort = dmhService.creatShort(tsid,Float.parseFloat(startOffset), Float.parseFloat(duration));
+		System.out.println("creatShort="+creatShort);
+		String result ="creatShort="+ creatShort +"<br><br>";
+		//String result = dmhService.selectShortRate("T10033153645", "150",128);
+		return result;
+	}
+	
 	/**
 	 * 登陆接口
 	 * 

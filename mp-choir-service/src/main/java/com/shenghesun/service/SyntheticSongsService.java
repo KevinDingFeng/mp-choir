@@ -53,7 +53,7 @@ public class SyntheticSongsService {
         if (userId == null || userId < 1) {
             return null;
         }
-        return syntheticSongsDao.findByUserIdsLikeAndRemoved("%," + userId + ",%", false);
+        return syntheticSongsDao.findByUserIdsLikeAndRemovedOrderByLastModifiedDesc("%," + userId + ",%", false);
     }
 
     public String getWxacodePathByChoirId(Long choirId) {

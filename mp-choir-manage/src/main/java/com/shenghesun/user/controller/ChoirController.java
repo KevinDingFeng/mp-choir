@@ -120,4 +120,52 @@ public class ChoirController {
 		return response;
 	}
 	
+	
+	/**
+	 * 修改团信息
+	 * @Title: updateChoirInfo 
+	 * @Description: TODO 
+	 * @param choir
+	 * @return  Object 
+	 * @author yangzp
+	 * @date 2018年9月18日下午6:12:02
+	 **/ 
+	@RequestMapping(value = "/updateChoirInfo")
+	@ResponseBody
+	public Object updateChoirInfo(Choir choir) {
+		BaseResponse response = new BaseResponse();
+		try {
+			Choir choirDb = choirService.getForUpdate(choir.getId());
+			choirDb.setChoirName(choir.getChoirName());
+			choirDb.setPopulation(choir.getPopulation());
+			choirService.save(choirDb);
+			
+			response.setData(choirDb);
+		} catch (Exception e) {
+			logger.error("Exception {} in {} " , e.getMessage() , "updateChoirInfo:"+choir.getId()); 
+		}
+		return response;
+	}
+	
+	/**
+	 * 获取团信息
+	 * @Title: getChoirInfo 
+	 * @Description: TODO 
+	 * @param choirId
+	 * @return  Object 
+	 * @author yangzp
+	 * @date 2018年9月18日下午5:30:29
+	 **/ 
+	@RequestMapping(value = "/getChoirInfo")
+	@ResponseBody
+	public Object getChoirInfo(Long choirId) {
+		BaseResponse response = new BaseResponse();
+		try {
+			Choir choir = choirService.getForUpdate(choirId);
+			response.setData(choir);
+		} catch (Exception e) {
+			logger.error("Exception {} in {} " , e.getMessage() , "getChoirInfo:"+choirId); 
+		}
+		return response;
+	}
 }

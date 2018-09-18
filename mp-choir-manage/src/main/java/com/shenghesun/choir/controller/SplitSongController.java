@@ -62,8 +62,13 @@ public class SplitSongController {
 			//获取以前分段数据并删除
 			List<SongSection> songSections = songSectionService.findByChoirId(choir.getId());
 			if(!CollectionUtils.isEmpty(songSections)) {
-				//songSectionService.delete(songSections);
-				return response;
+				Choir ssChoir = songSections.get(0).getChoir();
+				//选择的是不同的歌曲
+				if(!choir.getSongName().equals(ssChoir.getSongName())) {
+					songSectionService.delete(songSections);//删除之前的分段信息
+				}else {
+					return response;
+				}
 			}
 			
 			//修改团：歌名，歌手
@@ -73,8 +78,8 @@ public class SplitSongController {
 			choirService.save(ctemp);
 			
 			//根据歌名获取分段时间信息
-			//List<SplitSongDuration> ssdList = splitSongDurationService.findBySongName(ctemp.getSongName(), ctemp.getPopulation());
-			List<SplitSongDuration> ssdList = splitSongDurationService.findBySongName("葫芦娃", ctemp.getPopulation());
+			List<SplitSongDuration> ssdList = splitSongDurationService.findBySongName(ctemp.getSongName(), ctemp.getPopulation());
+			//List<SplitSongDuration> ssdList = splitSongDurationService.findBySongName("葫芦娃", ctemp.getPopulation());
 			if(!CollectionUtils.isEmpty(ssdList)) {
 				SplitSongDuration ssd = ssdList.get(0);
 				//0(音频起始秒数),10(切割音频的长度);10,12;22,10

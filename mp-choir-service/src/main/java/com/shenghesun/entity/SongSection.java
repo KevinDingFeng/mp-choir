@@ -115,7 +115,7 @@ public class SongSection extends BaseEntity implements Serializable {
     }
     
     @Column
-    @JsonFormat(timezone="GMT+8")
+    @JsonFormat(pattern="yyyy/MM/dd HH:mm:ss",timezone="GMT+8")
 	private Timestamp pastTime;
     
     public static void main(String[] args) {

@@ -152,7 +152,7 @@ public class SyntheticSongsController {
                 String subPath = FileIOUtil.generateSubPathStr();
                 //合成后的文件
                 File songFile = CutMusic.createFile(basePath + subPath, choirId + ".mp3");
-                StringBuffer userIdBff = new StringBuffer();
+                StringBuffer userIdBff = new StringBuffer(",");
                 for (SongSection ss : ssList) {
                     userIdBff.append(ss.getUserId() + ",");
                     if (StringUtils.isNotEmpty(ss.getAudioPath())) {
