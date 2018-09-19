@@ -148,6 +148,31 @@ public class ChoirController {
 	}
 	
 	/**
+	 * 修改发布演唱任务已经点击
+	 * @Title: updateChoirPublishTask 
+	 * @Description: TODO 
+	 * @param choir
+	 * @return  Object 
+	 * @author yangzp
+	 * @date 2018年9月19日下午3:54:21
+	 **/ 
+	@RequestMapping(value = "/updateChoirPublishTask")
+	@ResponseBody
+	public Object updateChoirPublishTask(Long choirId) {
+		BaseResponse response = new BaseResponse();
+		try {
+			Choir choirDb = choirService.getForUpdate(choirId);
+			choirDb.setPublishTask(true);
+			choirService.save(choirDb);
+			
+			response.setData(choirDb);
+		} catch (Exception e) {
+			logger.error("Exception {} in {} " , e.getMessage() , "updateChoirPublishTask:"+choirId); 
+		}
+		return response;
+	}
+	
+	/**
 	 * 获取团信息
 	 * @Title: getChoirInfo 
 	 * @Description: TODO 

@@ -75,6 +75,12 @@ public class Choir extends BaseEntity implements Serializable{
 	joinColumns = {@JoinColumn(name = "choir_id")})
 	private Set<User> users;
 	
+	/**
+	 * 发布演唱任务是否已经点击 false:未点击；true：已经点击
+	 */
+	@Column
+	private Boolean publishTask = false;
+	
 	@Transient
 	private String TSID;
 	
