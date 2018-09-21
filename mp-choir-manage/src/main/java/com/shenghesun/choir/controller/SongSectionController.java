@@ -196,9 +196,10 @@ public class SongSectionController {
             if (songSectionService.uploadAudioFile(sectionId, audioFile)) {
             	//团完成数+1
             	Choir choir = choirService.getForUpdate(choirId);
-            	choir.setCompleteNum(choir.getCompleteNum()+1);
-            	choirService.save(choir);
-            	
+            	if(choir.getCompleteNum()<choir.getPopulation()) {
+            		choir.setCompleteNum(choir.getCompleteNum()+1);
+                	choirService.save(choir);
+            	}
                 response.setSuccess(true);
                 response.setMessage("上传成功");
                 return response;

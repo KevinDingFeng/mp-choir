@@ -34,6 +34,11 @@ public class SyntheticSongsService {
     
     @Value("${server.host.url}")
     private String hostUrl;
+    
+    @Value("${wechat.miniapp.appid}")
+    private String appid;
+    @Value("${wechat.miniapp.secret}")
+    private String secret;
 
     public SyntheticSongs findById(Long id) {
         if (id == null || id < 1) {
@@ -80,7 +85,7 @@ public class SyntheticSongsService {
             return hostUrl + this.showFilePath + wxacodePath;
         }
         String tokenResult = HttpClientService.httpGet("https://api.weixin.qq.com/cgi-bin/token?grant_type=" +
-                "client_credential&appid=wxd5d28f91e9c2c730&secret=bd68bcdc797acdd91e05083b4d111286", null);
+                "client_credential&appid=" + appid + "&secret=" + secret, null);
         if (StringUtils.isBlank(tokenResult)) {
             return null;
         }
@@ -88,7 +93,7 @@ public class SyntheticSongsService {
         String accessToken = tokenObject.getString("access_token");
         String url = "https://api.weixin.qq.com/wxa/getwxacode?access_token=" + accessToken;
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("path", "pages/c_musice/c_musice");
+        jsonObject.put("path", "pages/Codeshare/Codeshare?choirId="+syntheticSongs.getChoir().getId());
         jsonObject.put("width", 430);
         HttpResponse response = HttpClientService.post(url, null, jsonObject.toJSONString());
         try {

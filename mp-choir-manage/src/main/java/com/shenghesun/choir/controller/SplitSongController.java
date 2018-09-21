@@ -61,18 +61,20 @@ public class SplitSongController {
 			
 			//获取以前分段数据并删除
 			List<SongSection> songSections = songSectionService.findByChoirId(choir.getId());
+			
+			//修改团：歌名，歌手
+			Choir ctemp = choirService.getForUpdate(choir.getId());
 			if(!CollectionUtils.isEmpty(songSections)) {
 				Choir ssChoir = songSections.get(0).getChoir();
 				//选择的是不同的歌曲
 				if(!choir.getSongName().equals(ssChoir.getSongName())) {
 					songSectionService.delete(songSections);//删除之前的分段信息
+					ctemp.setCompleteNum(0);
 				}else {
 					return response;
 				}
 			}
 			
-			//修改团：歌名，歌手
-			Choir ctemp = choirService.getForUpdate(choir.getId());
 			ctemp.setSinger(choir.getSinger());
 			ctemp.setSongName(choir.getSongName());
 			choirService.save(ctemp);

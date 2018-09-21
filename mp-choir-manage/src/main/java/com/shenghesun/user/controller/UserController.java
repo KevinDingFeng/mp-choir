@@ -3,6 +3,8 @@ package com.shenghesun.user.controller;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -150,8 +152,11 @@ public class UserController {
             User dbUser = userService.save(user);
             data.put("userId", dbUser.getId());
         }else {
-        	if(StringUtils.isEmpty(user.getNickName())) {
+        	if(StringUtils.isEmpty(user.getAvatarUrl())) {
         		BeanUtils.copyProperties(userInfo, user);
+        		if(hasEmoji(userInfo.getNickName())) {
+        			user.setNickName(null);
+        		}
                 userService.save(user);
         	}
         	data.put("userId", user.getId());
@@ -267,4 +272,13 @@ public class UserController {
 		return tokenValue.split(":")[1];
 	}
 	
+	private boolean hasEmoji(String content){
+
+	    Pattern pattern = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]");
+	    Matcher matcher = pattern.matcher(content);
+	    if(matcher .find()){
+	        return true;    
+	    }
+	        return false;
+	}
 }
